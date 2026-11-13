@@ -133,7 +133,7 @@ staticFiles['/']=staticFiles['/index.html'];
 const readFile=Object.hasOwn(staticFiles,p)?staticFiles[p]:null;if(!readFile)throw fail(404,'No encontrado.');
 const ext=path.extname(p)||'.html',types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml'};
 res.setHeader('Content-Type',types[ext]);const content=readFile();res.writeHead(200);res.end(req.method==='HEAD'?undefined:content);
-}catch(e){if(!e.status){const diagnostic=typeof e.code==='string'&&/^[A-Z0-9_]+$/.test(e.code)?e.code:'UNEXPECTED';console.error('Nutra request failed:',diagnostic);}if(!res.headersSent){if(e.status===429)res.setHeader('Retry-After','900');send(res,e.status||500,{error:e.status?e.message:'Error interno. Intenta nuevamente.'})}else res.end()}
+}catch(e){if(!e.status){const diagnostic=typeof e.code==='string'&&/^[A-Z0-9_]+$/.test(e.code)?e.code:'UNEXPECTED';const requestId=crypto.randomUUID();res.setHeader('X-Nutra-Request-Id',requestId);console.error('Nutra request failed:',JSON.stringify({code:diagnostic,requestId}));}if(!res.headersSent){if(e.status===429)res.setHeader('Retry-After','900');send(res,e.status||500,{error:e.status?e.message:'Error interno. Intenta nuevamente.'})}else res.end()}
 }
 const server=http.createServer({maxHeaderSize:8192,requestTimeout:10000,headersTimeout:10000,keepAliveTimeout:5000,connectionsCheckingInterval:1000},handle);server.maxConnections=100;
 server.on('close',()=>{Promise.resolve(db.close()).catch(()=>{});});return server;
