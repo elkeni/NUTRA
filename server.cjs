@@ -43,7 +43,7 @@ async function limit(key,max,windowMs){
       expires=CASE WHEN limits.expires<=? THEN excluded.expires ELSE limits.expires END
     WHERE limits.expires<=? OR limits.count<?
     RETURNING count`).get(hash(key),now+windowMs,now,now,now,max);
-  if(!row)throw fail(429,'Demasiados intentos. Espera unos minutos.');
+  if(!row){const error=fail(429,'Demasiados intentos. Espera unos minutos.');error.retryAfter=Math.ceil(windowMs/1000);throw error}
 }
 function send(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(data))}
 function cookie(res,value,seconds){res.setHeader('Set-Cookie',cookieName+'='+value+'; Path=/; HttpOnly; SameSite=Strict; Max-Age='+seconds+(secure?'; Secure':''))}
@@ -66,8 +66,8 @@ res.setHeader('Cache-Control','no-store');if(secure)res.setHeader('Strict-Transp
 try{
 if(req.headers.host!==urlOrigin.host)throw fail(421,'Host no permitido.');
 const url=new URL(req.url,origin),p=url.pathname,ip=req.socket.remoteAddress||'unknown';
-await limit('global',6000,60000);await limit('ip:'+ip,300,60000);
 if(p.startsWith('/api/')){
+await limit('global',6000,60000);await limit('ip:'+ip,300,60000);
 await cleanupExpired();
 if(req.headers['sec-fetch-site']==='cross-site')throw fail(403,'Origen no permitido.');
 if(!['GET','POST','PUT'].includes(req.method))throw fail(405,'Método no permitido.');
@@ -134,10 +134,11 @@ throw fail(404,'Ruta no encontrada.');
 if(!['GET','HEAD'].includes(req.method))throw fail(405,'Método no permitido.');
 const staticFiles={'/index.html':()=>fs.readFileSync(path.join(__dirname,'dist/index.html')),'/app.js':()=>fs.readFileSync(path.join(__dirname,'dist/app.js')),'/styles.css':()=>fs.readFileSync(path.join(__dirname,'dist/styles.css')),'/foods.json':()=>fs.readFileSync(path.join(__dirname,'dist/foods.json')),'/icon.svg':()=>fs.readFileSync(path.join(__dirname,'dist/icon.svg')),'/manifest.json':()=>fs.readFileSync(path.join(__dirname,'dist/manifest.json')),'/sw.js':()=>fs.readFileSync(path.join(__dirname,'dist/sw.js'))};
 staticFiles['/']=staticFiles['/index.html'];
+staticFiles['/favicon.ico']=staticFiles['/icon.svg'];
 const readFile=Object.hasOwn(staticFiles,p)?staticFiles[p]:null;if(!readFile)throw fail(404,'No encontrado.');
-const ext=path.extname(p)||'.html',types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml'};
+const ext=p==='/favicon.ico'?'.svg':path.extname(p)||'.html',types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml'};
 res.setHeader('Content-Type',types[ext]);const content=readFile();res.writeHead(200);res.end(req.method==='HEAD'?undefined:content);
-}catch(e){if(!e.status){const diagnostic=typeof e.code==='string'&&/^[A-Z0-9_]+$/.test(e.code)?e.code:'UNEXPECTED';const requestId=crypto.randomUUID();res.setHeader('X-Nutra-Request-Id',requestId);console.error('Nutra request failed:',JSON.stringify({code:diagnostic,requestId}));}if(!res.headersSent){if(e.status===429)res.setHeader('Retry-After','900');send(res,e.status||500,{error:e.status?e.message:'Error interno. Intenta nuevamente.'})}else res.end()}
+}catch(e){if(!e.status){const diagnostic=typeof e.code==='string'&&/^[A-Z0-9_]+$/.test(e.code)?e.code:'UNEXPECTED';const requestId=crypto.randomUUID();res.setHeader('X-Nutra-Request-Id',requestId);console.error('Nutra request failed:',JSON.stringify({code:diagnostic,requestId}));}if(!res.headersSent){if(e.status===429)res.setHeader('Retry-After',String(e.retryAfter||60));send(res,e.status||500,{error:e.status?e.message:'Error interno. Intenta nuevamente.'})}else res.end()}
 }
 const server=http.createServer({maxHeaderSize:8192,requestTimeout:10000,headersTimeout:10000,keepAliveTimeout:5000,connectionsCheckingInterval:1000},handle);server.maxConnections=100;
 server.on('close',()=>{Promise.resolve(db.close()).catch(()=>{});});return server;

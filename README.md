@@ -1,5 +1,7 @@
 # Nutra
 
+**Nutra 2.1 «Constancia»**
+
 Nutra es una aplicación web para registrar comidas, calorías y macronutrientes. El diario reúne tus objetivos diarios y el seguimiento de agua y peso en una interfaz pensada para celulares.
 
 ## Qué puedes hacer
@@ -9,7 +11,7 @@ Nutra es una aplicación web para registrar comidas, calorías y macronutrientes
 - Guardar recetas en el diario, planificar comidas y generar una lista de compras.
 - Revisar el historial de calorías y peso, ajustar objetivos y exportar o importar tus registros en JSON.
 
-El código se puede consultar públicamente. Cada instalación guarda sus cuentas y registros en una base SQLite propia. El registro requiere un correo autorizado, un código de invitación y un CAPTCHA de Cloudflare Turnstile.
+El código se puede consultar públicamente. Cada instalación guarda sus cuentas y registros en una base SQLite propia o en PostgreSQL/Supabase mediante `DATABASE_URL`. El registro requiere un correo autorizado, un código de invitación y un CAPTCHA de Cloudflare Turnstile.
 
 ## Inicio local
 
@@ -30,10 +32,10 @@ Usa el código de invitación al crear tu cuenta. La aplicación bloquea el acce
 | `server.cjs` | Servidor HTTP, API, autenticación y almacenamiento |
 | `dist/` | HTML, CSS, JavaScript y recursos que sirve el backend |
 | `src/` | Validación de datos del servidor |
-| `tests/` | Pruebas de seguridad de la API |
+| `tests/` | Pruebas de seguridad, cliente y catálogo |
 | `.env.example` | Plantilla de configuración con valores de ejemplo |
 
-Ejecuta `npm test` para verificar autenticación, aislamiento de cuentas, validación de datos y controles de seguridad. Las pruebas usan un verificador CAPTCHA simulado y bases temporales.
+Ejecuta `npm test` para verificar autenticación, aislamiento de cuentas, validación de datos, controles de seguridad, medidas del cliente y rutas estáticas. Las pruebas usan un verificador CAPTCHA simulado y bases temporales.
 
 ## Datos y despliegue
 

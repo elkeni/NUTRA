@@ -9,22 +9,7 @@ const {createApp}=require('../server.cjs');
 const {fresh,validState,normalizePlan}=require('../src/validation.cjs');
 const catalog=require('../dist/foods.json');
 
-function browserModel(){
-  const elements=new Map();
-  function element(selector){
-    if(!elements.has(selector))elements.set(selector,{
-      value:'',innerHTML:'',textContent:'',classList:{toggle(){}},open:false,
-      showModal(){this.open=true},insertAdjacentHTML(_,html){this.innerHTML+=html}
-    });
-    return elements.get(selector);
-  }
-  const document={querySelector:element,addEventListener(){}};
-  const context=vm.createContext({catalog,fresh,document,window:{addEventListener(){}},crypto,confirm:()=>true});
-  const source=fs.readFileSync(path.join(__dirname,'../dist/app.js'),'utf8').replace(/boot\(\);\s*$/,'');
-  vm.runInContext(source,context);
-  vm.runInContext("base=catalog.base;recipes=catalog.recipes;legacyRecipeIds=catalog.legacyRecipeIds;state=fresh('Prueba');date='2026-11-12'",context);
-  return {element,run:script=>vm.runInContext(script,context),context};
-}
+const {browserModel}=require('./helpers/browser.cjs');
 
 test('Catálogo con IDs únicos, fuentes y recetas calculables',()=>{
   assert(catalog.base.length>=100);

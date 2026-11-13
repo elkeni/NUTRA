@@ -5,13 +5,44 @@ let state=null,version=0,csrf='',account='',page='Diario',date=today(),base=[],r
 function today(d=new Date()){return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const round=n=>Math.round(n);
-function day(){return state.days[date]||(state.days[date]={entries:[],water:0})}
+function day(on=date){return state.days[on]||(state.days[on]={entries:[],water:0})}
 function foods(){return [...base,...state.foods]}
 function totals(entries=day().entries){return entries.reduce((a,e)=>{for(const k of ['k','p','c','f'])a[k]+=e[k]*e.grams/100;return a},{k:0,p:0,c:0,f:0})}
 function button(text,action,data='',cls='quiet'){return '<button class="'+cls+'" data-action="'+action+'" '+data+'>'+text+'</button>'}
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');setTimeout(()=>$('#toast').classList.add('hidden'),4000)}
 async function api(p,method='GET',data){const r=await fetch('/api/'+p,{method,credentials:'same-origin',cache:'no-store',headers:{...(data?{'Content-Type':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf}:{})},body:data?JSON.stringify(data):undefined});const b=await r.json();if(!r.ok){const e=Error(b.error||'No se pudo completar la solicitud.');e.status=r.status;throw e}return b}
-async function persist(change){if(busy)return;busy=true;const prior=structuredClone(state);change();try{const r=await api('state','PUT',{state,version});version=r.version;render();toast('Guardado en tu cuenta');return true}catch(e){state=prior;if(e.status===401){state=null;csrf='';auth()}else if(e.status===409){try{const r=await api('state');state=r.state;version=r.version;render()}catch{}}toast(e.message)}finally{busy=false}}
+let saveQueue=Promise.resolve(),saveEpoch=0;
+function persist(change){
+  const epoch=saveEpoch;
+  const save=async()=>{
+    if(epoch!==saveEpoch||!state)return false;
+    busy=true;
+    const prior=structuredClone(state);
+    try{
+      change();
+      const r=await api('state','PUT',{state,version});
+      version=r.version;
+    }catch(error){
+      state=prior;
+      saveEpoch++;
+      if(error.status===409){
+        try{const latest=await api('state');state=latest.state;version=latest.version}
+        catch(reloadError){if(reloadError.status===401)error=reloadError}
+      }
+      if(error.status===401){state=null;csrf='';close()}
+      render();
+      if(state&&$('#modal').open&&$('#modal').querySelector('[data-check]'))shopping();
+      toast(error.message+' No se aplicaron los cambios pendientes.');
+      return false;
+    }finally{busy=false}
+    render();
+    toast('Guardado en tu cuenta');
+    return true;
+  };
+  const pending=saveQueue.then(save);
+  saveQueue=pending.catch(()=>{});
+  return pending;
+}
 function modal(title,body){$('#modal').innerHTML='<div class="between"><h2>'+esc(title)+'</h2>'+button('✕','close','','text-btn')+'</div>'+body;if(!$('#modal').open)$('#modal').showModal()}
 function close(){ $('#modal').close()}
 function heading(title,sub){return '<div class="heading"><h1>'+title+'</h1><p>'+sub+'</p></div>'}
@@ -157,14 +188,17 @@ function portion(grams){
 }
 function decimal(input){
   const value=input.value.trim().replace(',','.');
-  return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(value)?Number(value):NaN;
+  return /^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(value)?Number(value):NaN;
+}
+function measureFactor(unit){
+  const references=portionFood().portions||[];
+  if(unit==='g')return 1;
+  if(unit==='mg')return 0.001;
+  if(unit.startsWith('ref-'))return references[Number(unit.slice(4))]?.grams??NaN;
+  return unit.startsWith('custom-')?decimal($('#portion-unit-weight')):NaN;
 }
 function measuredGrams(){
-  const unit=$('#portion-unit').value;
-  const amount=decimal($('#portion-amount'));
-  const references=portionFood().portions||[];
-  const factor=unit==='g'?1:unit==='mg'?0.001:unit.startsWith('ref-')?references[Number(unit.slice(4))].grams:decimal($('#portion-unit-weight'));
-  const grams=amount*factor;
+  const grams=decimal($('#portion-amount'))*measureFactor($('#portion-unit').value);
   return grams>=0.001&&grams<=10000?Math.round(grams*1000)/1000:NaN;
 }
 function nutritionText(values){
@@ -174,9 +208,9 @@ function changePortionUnit(select){
   const amount=$('#portion-amount');
   const previous=select.dataset.previous;
   const value=decimal(amount);
-  if(previous==='g'&&select.value==='mg'&&Number.isFinite(value))amount.value=value*1000;
-  else if(previous==='mg'&&select.value==='g'&&Number.isFinite(value))amount.value=value/1000;
-  else if(!['g','mg'].includes(select.value)&&select.value!==previous)amount.value=1;
+  const grams=value*measureFactor(previous),factor=measureFactor(select.value);
+  if(Number.isFinite(grams)&&Number.isFinite(factor)&&factor>0)amount.value=Number((grams/factor).toPrecision(12));
+  else if(select.value!==previous)amount.value=1;
   select.dataset.previous=select.value;
   estimate();
 }
@@ -187,7 +221,7 @@ function estimate(){
   const weight=$('#portion-unit-weight');
   weight.disabled=!custom;
   weight.required=custom;
-  const reference=portionFood().portions?.[Number(unit.slice(4))];
+  const reference=unit.startsWith('ref-')?portionFood().portions?.[Number(unit.slice(4))]:null;
   $('#measure-note').innerHTML=custom?'Pesa una medida de este alimento y escribe su peso en gramos. Un vaso o un puñado cambia de peso según el alimento.':
     reference?'Peso de referencia aproximado · '+sourceLink(reference.url?'USDA':'Rendimiento de la receta',reference.url):'';
   const grams=measuredGrams();
@@ -253,7 +287,8 @@ function planPage(){
 function generatePlan(){
   if(!confirm('¿Reemplazar el plan de estos 7 días con ideas?'))return;
   const groups=meals.map((_,index)=>recipes.filter(recipe=>recipe.meal===index));
-  return persist(()=>weekDates().forEach((day,index)=>{
+  const dates=weekDates();
+  return persist(()=>dates.forEach((day,index)=>{
     state.plan[day]=Object.fromEntries(groups.flatMap((group,mealIndex)=>group.length?[[mealIndex,group[index%group.length].id]]:[]));
   }));
 }
@@ -271,22 +306,22 @@ function shopping(){
     '<p>Agrega recetas a tu plan para ver los ingredientes.</p>');
 }
 function progress(){const weights=[...state.weights].sort((a,b)=>b.date.localeCompare(a.date));return heading('Mira tu progreso','Cada registro es una parte de tu historia.')+button('＋ Registrar peso','weight','','')+'<div class="card"><small>ÚLTIMO PESO</small><h1>'+(weights[0]?.value||'—')+' kg</h1><p class="note">'+Object.values(state.days).filter(d=>d.entries.length).length+' días con comidas registradas</p></div><div class="card"><h2>Calorías · últimos 7 días</h2><div class="chart">'+Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);const t=totals(state.days[today(d)]?.entries||[]),h=Math.min(100,t.k/state.profile.k*100);return '<div class="column">'+round(t.k)+'<svg viewBox="0 0 30 110"><rect class="colbar" x="3" y="'+(110-h)+'" width="24" height="'+h+'" rx="4"/></svg>'+d.toLocaleDateString('es',{weekday:'short'})+'</div>'}).join('')+'</div></div><div class="card"><h2>Historial de peso</h2>'+(weights.map(w=>'<div class="entry"><span class="grow">'+esc(w.date)+'</span><b>'+w.value+' kg</b>'+button('×','delete-weight','data-date="'+w.date+'" aria-label="Eliminar peso"')+'</div>').join('')||'<p class="empty">Registra tu primer peso.</p>')+'</div>'}
-function settings(){return heading('Tu espacio personal','Objetivos, datos y seguridad de tu cuenta.')+'<form id="settings" class="card"><h2>Objetivos diarios</h2><div class="form-grid">'+[['name','Nombre'],['k','Calorías (kcal)'],['p','Proteínas (g)'],['c','Carbohidratos (g)'],['f','Grasas (g)'],['water','Agua (ml)']].map(([k,n])=>'<label>'+n+'<input name="'+k+'" value="'+esc(state.profile[k])+'" '+(k==='name'?'maxlength="50"':'type="number" min="1" max="'+(k==='water'?15000:k==='k'?10000:1000)+'"')+' required></label>').join('')+'</div><p class="note">Los valores iniciales son ejemplos, no recomendaciones personales.</p><button class="wide">Guardar objetivos</button></form><div class="card"><h2>Tus datos</h2><p class="note">Guardados en el servidor y separados por cuenta. Las copias descargadas contienen tus registros personales.</p>'+button('↓ Exportar copia','export')+'<label>Importar una copia JSON<input id="import" type="file" accept=".json,application/json"></label>'+button('Importar datos de la versión anterior','legacy')+'</div><div class="card"><h2>Seguridad</h2><p>'+esc(account)+'</p><p class="note">Sesión de hasta 12 horas, con cierre tras 30 minutos sin actividad. Iniciar sesión en otro dispositivo cierra la sesión anterior.</p>'+button('Cerrar sesión','logout','','danger wide')+'</div>'}
+function settings(){return heading('Tu espacio personal','Objetivos, datos y seguridad de tu cuenta.')+'<form id="settings" class="card"><h2>Objetivos diarios</h2><div class="form-grid">'+[['name','Nombre'],['k','Calorías (kcal)'],['p','Proteínas (g)'],['c','Carbohidratos (g)'],['f','Grasas (g)'],['water','Agua (ml)']].map(([k,n])=>'<label>'+n+'<input name="'+k+'" value="'+esc(state.profile[k])+'" '+(k==='name'?'maxlength="50"':'type="number" step="any" min="1" max="'+(k==='water'?15000:k==='k'?10000:1000)+'"')+' required></label>').join('')+'</div><p class="note">Los valores iniciales son ejemplos, no recomendaciones personales.</p><button class="wide">Guardar objetivos</button></form><div class="card"><h2>Tus datos</h2><p class="note">Guardados en el servidor y separados por cuenta. Las copias descargadas contienen tus registros personales.</p>'+button('↓ Exportar copia','export')+'<label>Importar una copia JSON<input id="import" type="file" accept=".json,application/json"></label>'+button('Importar datos de la versión anterior','legacy')+'</div><div class="card"><h2>Seguridad</h2><p>'+esc(account)+'</p><p class="note">Sesión de hasta 12 horas, con cierre tras 30 minutos sin actividad. Iniciar sesión en otro dispositivo cierra la sesión anterior.</p>'+button('Cerrar sesión','logout','','danger wide')+'</div>'}
 const actions={
 close,'retry-captcha':retryCaptcha,mode:el=>{if($('#auth-form')?.dataset.submitting==='true')return;authMode=el.dataset.mode;auth()},page:el=>{page=el.dataset.page;render()},add:el=>add(Number(el.dataset.meal)),
-choose:el=>{chosen=foods().find(f=>f.id===el.dataset.id);portion()},edit:el=>{chosen=day().entries.find(e=>e.uid===el.dataset.id);editing=chosen.uid;meal=chosen.meal;portion(chosen.grams)},
-delete:el=>persist(()=>{day().entries=day().entries.filter(e=>e.uid!==el.dataset.id)}),
+choose:el=>{const food=foods().find(f=>f.id===el.dataset.id);if(!food)return toast('Ese alimento ya no está disponible.');chosen=food;portion()},edit:el=>{const entry=day().entries.find(e=>e.uid===el.dataset.id);if(!entry)return toast('Ese registro ya no está disponible. Recarga la página.');chosen=entry;editing=entry.uid;meal=entry.meal;portion(entry.grams)},
+delete:el=>{const on=date,id=el.dataset.id;return persist(()=>{day(on).entries=day(on).entries.filter(e=>e.uid!==id)})},
 'water-custom':()=>modal('Registrar agua','<form id="water-custom"><label>Mililitros que tomaste<input name="ml" type="number" inputmode="numeric" min="1" max="20000" value="250" required></label><p class="note">Si tomaste un vaso entero, usa su capacidad en mililitros.</p><button class="wide">Agregar agua</button></form>'),
-water:el=>persist(()=>{day().water=Math.min(20000,Math.max(0,day().water+Number(el.dataset.value)))}),
+water:el=>{const on=date,amount=Number(el.dataset.value);if(!Number.isFinite(amount)||!amount)return;return persist(()=>{day(on).water=Math.min(20000,Math.max(0,day(on).water+amount))})},
 custom,barcode:()=>modal('Código de barras','<form id="barcode"><label>Código del envase<input name="code" inputmode="numeric" pattern="[0-9]{8,14}" required></label><p class="note">Consulta de productos a Open Food Facts.</p><button class="wide">Buscar producto</button></form>'),
-copy:()=>{const d=new Date(date+'T12:00:00');d.setDate(d.getDate()-1);const entries=state.days[today(d)]?.entries;if(!entries?.length)return toast('No hay comidas del día anterior.');if(confirm('¿Agregar las comidas del día anterior?'))persist(()=>day().entries.push(...entries.map(e=>({...e,uid:crypto.randomUUID()}))))},
+copy:()=>{const on=date,d=new Date(on+'T12:00:00');d.setDate(d.getDate()-1);const entries=state.days[today(d)]?.entries;if(!entries?.length)return toast('No hay comidas del día anterior.');if(day(on).entries.length+entries.length>100)return toast('El día supera los 100 alimentos. Elimina algunos antes de copiar.');if(confirm('¿Agregar las comidas del día anterior?'))persist(()=>{const target=day(on);if(target.entries.length+entries.length>100)throw Error('El día supera los 100 alimentos. Elimina algunos antes de copiar.');target.entries.push(...entries.map(e=>({...e,uid:crypto.randomUUID()})))})},
 recipe:el=>recipe(el.dataset.recipe),shopping,
 generate:generatePlan,
 weight:()=>modal('Registrar peso','<form id="weight"><label>Fecha<input name="date" type="date" value="'+today()+'" required></label><label>Peso en kg<input name="weight" type="number" min="20" max="500" step="0.1" required></label><button class="wide">Guardar peso</button></form>'),
 'delete-weight':el=>persist(()=>{state.weights=state.weights.filter(w=>w.date!==el.dataset.date)}),
 export:()=>{const u=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='nutra-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)},
 legacy:()=>{try{const old=JSON.parse(localStorage.getItem('nutra-v1'));if(!old)return toast('No hay registros antiguos en este navegador.');if(confirm('¿Reemplazar los datos de tu cuenta con los de la versión anterior?'))persist(()=>{state=old})}catch{toast('No se pudieron leer los registros antiguos.')}},
-logout:async()=>{await api('auth/logout','POST',{});state=null;csrf='';close();auth()}
+logout:async()=>{await saveQueue;await api('auth/logout','POST',{});saveEpoch++;state=null;csrf='';close();auth()}
 };
 document.addEventListener('click',async e=>{const el=e.target.closest('[data-action]');if(!el)return;try{await actions[el.dataset.action]?.(el)}catch(err){toast(err.message)}});
 document.addEventListener('input',e=>{if(e.target.id==='search')search(e.target.value);if(['portion-amount','portion-unit-weight'].includes(e.target.id))estimate()});
@@ -298,28 +333,32 @@ if(el.dataset.check){const id=el.dataset.check,on=el.checked;await persist(()=>{
 if(el.id==='import'){const f=el.files[0];if(!f)return;if(f.size>250000){toast('La copia supera el tamaño máximo.');return}try{const data=JSON.parse(await f.text());if(confirm('¿Reemplazar los datos actuales por esta copia?'))await persist(()=>{state=data})}catch{toast('Archivo JSON inválido.')}el.value=''}});
 document.addEventListener('submit',async e=>{e.preventDefault();const form=e.target,f=new FormData(form),submit=form.querySelector('button[type=submit],button:not([type])');
 const isAuth=form.id==='auth-form';
+if(form.dataset.submitting==='true')return;
 if(isAuth){
-  if(!captchaToken||form.dataset.submitting==='true')return;
-  form.dataset.submitting='true';
+  if(!captchaToken)return;
 }
+form.dataset.submitting='true';
 if(submit)submit.disabled=true;
 try{
 if(isAuth){if(authMode==='register'&&f.get('password')!==f.get('confirm'))throw Error('Las contraseñas no coinciden.');const r=await api('auth/'+authMode,'POST',{email:f.get('email'),password:f.get('password'),...(authMode==='register'?{name:f.get('name'),invitation:f.get('invitation')}:{}),website:f.get('website'),captcha:captchaToken});csrf=r.csrf;account=r.email;const data=await api('state');state=data.state;version=data.version;form.reset();if(widget!==null){window.turnstile.remove(widget);widget=null}render()}
-if(form.id==='portion'){const grams=measuredGrams();if(!Number.isFinite(grams)||grams<0.001||grams>10000)throw Error('Revisa el peso de la porción.');const entry={...foodSnapshot(chosen),uid:editing||crypto.randomUUID(),grams,meal:Number(f.get('meal'))};if(await persist(()=>{if(editing)day().entries=day().entries.map(x=>x.uid===editing?entry:x);else day().entries.push(entry)}))close()}
-if(form.id==='custom'){chosen={id:crypto.randomUUID(),name:f.get('name').trim(),emoji:'🍽',...Object.fromEntries(['k','p','c','f'].map(k=>[k,Number(f.get(k))]))};if(await persist(()=>state.foods.push(chosen)))portion()}
-if(form.id==='barcode'){chosen=await api('food/'+f.get('code'));if(await persist(()=>{if(!state.foods.some(x=>x.id===chosen.id))state.foods.push(chosen)}))portion()}
+if(form.id==='portion'){const grams=measuredGrams();if(!Number.isFinite(grams)||grams<0.001||grams>10000)throw Error('Revisa el peso de la porción.');const on=date,editId=editing,entry={...foodSnapshot(chosen),uid:editId||crypto.randomUUID(),grams,meal:Number(f.get('meal'))};if(await persist(()=>{if(editId)day(on).entries=day(on).entries.map(x=>x.uid===editId?entry:x);else day(on).entries.push(entry)}))close()}
+if(form.id==='custom'){const food={id:crypto.randomUUID(),name:f.get('name').trim(),emoji:'🍽',...Object.fromEntries(['k','p','c','f'].map(k=>[k,Number(f.get(k))]))};chosen=food;if(await persist(()=>state.foods.push(food))&&$('#modal').open&&chosen===food)portion()}
+if(form.id==='barcode'){const food=await api('food/'+f.get('code'));chosen=food;if(await persist(()=>{if(!state.foods.some(x=>x.id===food.id))state.foods.push(food)})&&$('#modal').open&&chosen===food)portion()}
 if(form.id==='recipe'){selectRecipePortion(form.dataset.recipe,Number(f.get('meal')))}
 if(form.id==='water-custom'){
-  const ml=Number(f.get('ml'));
-  if(!Number.isInteger(ml)||ml<1||ml>20000-day().water)throw Error('Revisa la cantidad. El máximo diario es 20 000 ml.');
-  if(await persist(()=>{day().water+=ml}))close();
+  const ml=Number(f.get('ml')),on=date;
+  if(await persist(()=>{
+    if(!Number.isInteger(ml)||ml<1||ml>20000-day(on).water)throw Error('Revisa la cantidad. El máximo diario es 20 000 ml.');
+    day(on).water+=ml;
+  }))close();
 }
-if(form.id==='weight'){const d=f.get('date');close();await persist(()=>{state.weights=state.weights.filter(w=>w.date!==d);state.weights.push({date:d,value:Number(f.get('weight'))})})}
+if(form.id==='weight'){const d=f.get('date');if(await persist(()=>{state.weights=state.weights.filter(w=>w.date!==d);state.weights.push({date:d,value:Number(f.get('weight'))})}))close()}
 if(form.id==='settings')await persist(()=>{for(const k of Object.keys(state.profile))state.profile[k]=k==='name'?f.get(k).trim():Number(f.get(k))});
 }catch(err){
   if(isAuth){authError(err.message);retryCaptcha()}else toast(err.message);
 }finally{
-  if(isAuth){delete form.dataset.submitting;updateAuthSubmit()}
+  delete form.dataset.submitting;
+  if(isAuth){updateAuthSubmit()}
   else if(submit)submit.disabled=false;
 }});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
