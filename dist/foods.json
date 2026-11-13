@@ -1,1 +1,2929 @@
-{"base":[{"id":"f0","name":"Huevo cocido","k":155,"p":13,"c":1.1,"f":11,"emoji":"🥚"},{"id":"f1","name":"Pechuga de pollo cocida","k":165,"p":31,"c":0,"f":3.6,"emoji":"🍗"},{"id":"f2","name":"Arroz blanco cocido","k":130,"p":2.7,"c":28,"f":0.3,"emoji":"🍚"},{"id":"f3","name":"Avena en hojuelas","k":389,"p":16.9,"c":66.3,"f":6.9,"emoji":"🌾"},{"id":"f4","name":"Plátano","k":89,"p":1.1,"c":22.8,"f":0.3,"emoji":"🍌"},{"id":"f5","name":"Palta","k":160,"p":2,"c":8.5,"f":14.7,"emoji":"🥑"},{"id":"f6","name":"Pan integral","k":247,"p":13,"c":41,"f":4.2,"emoji":"🍞"},{"id":"f7","name":"Leche entera","k":61,"p":3.2,"c":4.8,"f":3.3,"emoji":"🥛"},{"id":"f8","name":"Yogur griego natural","k":73,"p":10,"c":3.9,"f":1.9,"emoji":"🥣"},{"id":"f9","name":"Atún al agua escurrido","k":116,"p":26,"c":0,"f":1,"emoji":"🐟"},{"id":"f10","name":"Papa sancochada","k":87,"p":1.9,"c":20.1,"f":0.1,"emoji":"🥔"},{"id":"f11","name":"Camote cocido","k":76,"p":1.4,"c":17.7,"f":0.1,"emoji":"🍠"},{"id":"f12","name":"Quinua cocida","k":120,"p":4.4,"c":21.3,"f":1.9,"emoji":"🌾"},{"id":"f13","name":"Lentejas cocidas","k":116,"p":9,"c":20,"f":0.4,"emoji":"🥣"},{"id":"f14","name":"Manzana","k":52,"p":0.3,"c":13.8,"f":0.2,"emoji":"🍎"},{"id":"f15","name":"Arándanos","k":57,"p":0.7,"c":14.5,"f":0.3,"emoji":"🫐"},{"id":"f16","name":"Aceite de oliva","k":884,"p":0,"c":0,"f":100,"emoji":"🫒"},{"id":"f17","name":"Almendras","k":579,"p":21,"c":22,"f":50,"emoji":"🥜"},{"id":"f18","name":"Brócoli cocido","k":35,"p":2.4,"c":7.2,"f":0.4,"emoji":"🥦"},{"id":"f19","name":"Tomate","k":18,"p":0.9,"c":3.9,"f":0.2,"emoji":"🍅"},{"id":"f20","name":"Queso fresco","k":264,"p":18,"c":3,"f":20,"emoji":"🧀"},{"id":"f21","name":"Salmón cocido","k":206,"p":22,"c":0,"f":12,"emoji":"🐟"},{"id":"f22","name":"Fresas","k":32,"p":0.7,"c":7.7,"f":0.3,"emoji":"🍓"},{"id":"f23","name":"Frijoles cocidos","k":127,"p":8.7,"c":22.8,"f":0.5,"emoji":"🫘"}],"recipes":[{"name":"Bowl de pollo y quinua","emoji":"🥗","desc":"Una comida sencilla, fresca y llena de color.","items":[["f1",150],["f12",150],["f19",100],["f6",0],["f5",50]],"steps":"Cocina la quinua y el pollo por separado. Corta el tomate y la palta. Sirve todo en un bowl y sazona a tu gusto."},{"name":"Avena con plátano","emoji":"🥣","desc":"Tu desayuno de siempre, con cantidades claras.","items":[["f3",50],["f7",200],["f4",100]],"steps":"Cocina la avena con la leche durante 5 minutos. Añade el plátano en rodajas y canela si deseas."},{"name":"Tostadas con palta y huevo","emoji":"🥑","desc":"Rápido de preparar, fácil de repetir.","items":[["f6",70],["f5",60],["f0",100]],"steps":"Tuesta el pan, aplasta la palta y distribúyela encima. Añade los huevos cocidos en rodajas."},{"name":"Yogur con frutos rojos","emoji":"🫐","desc":"Un snack cremoso para cualquier momento.","items":[["f8",170],["f15",80],["f17",15]],"steps":"Sirve el yogur con los arándanos y las almendras picadas."},{"name":"Atún con arroz y verduras","emoji":"🍚","desc":"Ingredientes prácticos para tu almuerzo.","items":[["f9",120],["f2",180],["f18",150],["f16",5]],"steps":"Cocina el arroz y el brócoli. Mezcla con el atún escurrido y añade el aceite al servir."},{"name":"Lentejas con camote","emoji":"🍠","desc":"Un plato de casa con proteína vegetal.","items":[["f13",200],["f11",150],["f19",100],["f16",5]],"steps":"Sirve las lentejas cocidas junto al camote. Acompaña con tomate y aceite de oliva."}]}
+{
+  "base": [
+    {
+      "id": "f0",
+      "name": "Huevo cocido",
+      "k": 155,
+      "p": 13,
+      "c": 1.1,
+      "f": 11,
+      "emoji": "🥚",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [
+        "huevo sancochado"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Huevo grande",
+          "grams": 50,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400530/pdf/csfii8991_rep_91-3.pdf"
+        }
+      ]
+    },
+    {
+      "id": "f1",
+      "name": "Pechuga de pollo cocida",
+      "k": 165,
+      "p": 31,
+      "c": 0,
+      "f": 3.6,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [
+        "pollo",
+        "pechuga"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f2",
+      "name": "Arroz blanco cocido",
+      "k": 130,
+      "p": 2.7,
+      "c": 28,
+      "f": 0.3,
+      "emoji": "🍚",
+      "category": "Cereales y panes",
+      "preparation": "Cocido",
+      "aliases": [
+        "arroz"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Taza",
+          "grams": 158,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/hg72/hg72_2002.pdf"
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "name": "Avena en hojuelas",
+      "k": 389,
+      "p": 16.9,
+      "c": 66.3,
+      "f": 6.9,
+      "emoji": "🌾",
+      "category": "Cereales y panes",
+      "preparation": "Seco",
+      "aliases": [
+        "avena"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f4",
+      "name": "Plátano",
+      "k": 89,
+      "p": 1.1,
+      "c": 22.8,
+      "f": 0.3,
+      "emoji": "🍌",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [
+        "banana",
+        "banano"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Plátano mediano sin cáscara",
+          "grams": 118,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400530/pdf/portion.pdf"
+        }
+      ]
+    },
+    {
+      "id": "f5",
+      "name": "Palta",
+      "k": 160,
+      "p": 2,
+      "c": 8.5,
+      "f": 14.7,
+      "emoji": "🥑",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [
+        "aguacate"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f6",
+      "name": "Pan integral",
+      "k": 247,
+      "p": 13,
+      "c": 41,
+      "f": 4.2,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Listo para comer",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f7",
+      "name": "Leche entera",
+      "k": 61,
+      "p": 3.2,
+      "c": 4.8,
+      "f": 3.3,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Listo para beber",
+      "aliases": [
+        "leche de vaca"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Taza de leche",
+          "grams": 244,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400530/pdf/portion.pdf"
+        }
+      ]
+    },
+    {
+      "id": "f8",
+      "name": "Yogur griego natural",
+      "k": 73,
+      "p": 10,
+      "c": 3.9,
+      "f": 1.9,
+      "emoji": "🥣",
+      "category": "Lácteos",
+      "preparation": "Listo para comer",
+      "aliases": [
+        "yogurt griego"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f9",
+      "name": "Atún al agua escurrido",
+      "k": 116,
+      "p": 26,
+      "c": 0,
+      "f": 1,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "En conserva, escurrido",
+      "aliases": [
+        "atún en lata"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f10",
+      "name": "Papa sancochada",
+      "k": 87,
+      "p": 1.9,
+      "c": 20.1,
+      "f": 0.1,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Cocido",
+      "aliases": [
+        "patata cocida"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f11",
+      "name": "Camote cocido",
+      "k": 76,
+      "p": 1.4,
+      "c": 17.7,
+      "f": 0.1,
+      "emoji": "🍠",
+      "category": "Tubérculos",
+      "preparation": "Cocido",
+      "aliases": [
+        "batata",
+        "boniato"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f12",
+      "name": "Quinua cocida",
+      "k": 120,
+      "p": 4.4,
+      "c": 21.3,
+      "f": 1.9,
+      "emoji": "🌾",
+      "category": "Cereales y panes",
+      "preparation": "Cocido",
+      "aliases": [
+        "quinoa",
+        "quinoa cocida"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f13",
+      "name": "Lentejas cocidas",
+      "k": 116,
+      "p": 9,
+      "c": 20,
+      "f": 0.4,
+      "emoji": "🥣",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f14",
+      "name": "Manzana",
+      "k": 52,
+      "p": 0.3,
+      "c": 13.8,
+      "f": 0.2,
+      "emoji": "🍎",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f15",
+      "name": "Arándanos",
+      "k": 57,
+      "p": 0.7,
+      "c": 14.5,
+      "f": 0.3,
+      "emoji": "🫐",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [
+        "blueberries"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f16",
+      "name": "Aceite de oliva",
+      "k": 884,
+      "p": 0,
+      "c": 0,
+      "f": 100,
+      "emoji": "🫒",
+      "category": "Aceites y condimentos",
+      "preparation": "Listo para usar",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Cucharada rasa",
+          "grams": 13.5,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/hg72/hg72_2002.pdf"
+        }
+      ]
+    },
+    {
+      "id": "f17",
+      "name": "Almendras",
+      "k": 579,
+      "p": 21,
+      "c": 22,
+      "f": 50,
+      "emoji": "🥜",
+      "category": "Frutos secos y semillas",
+      "preparation": "Seco",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      },
+      "portions": [
+        {
+          "label": "Porción de almendras",
+          "grams": 28,
+          "url": "https://www.fna.usda.gov/tn/cacfp/meal-pattern-training-worksheets/crediting-single-serving-packages-grains"
+        }
+      ]
+    },
+    {
+      "id": "f18",
+      "name": "Brócoli cocido",
+      "k": 35,
+      "p": 2.4,
+      "c": 7.2,
+      "f": 0.4,
+      "emoji": "🥦",
+      "category": "Verduras",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f19",
+      "name": "Tomate",
+      "k": 18,
+      "p": 0.9,
+      "c": 3.9,
+      "f": 0.2,
+      "emoji": "🍅",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [
+        "jitomate"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f20",
+      "name": "Queso fresco",
+      "k": 264,
+      "p": 18,
+      "c": 3,
+      "f": 20,
+      "emoji": "🧀",
+      "category": "Lácteos",
+      "preparation": "Listo para comer",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f21",
+      "name": "Salmón cocido",
+      "k": 206,
+      "p": 22,
+      "c": 0,
+      "f": 12,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f22",
+      "name": "Fresas",
+      "k": 32,
+      "p": 0.7,
+      "c": 7.7,
+      "f": 0.3,
+      "emoji": "🍓",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [
+        "frutillas"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "f23",
+      "name": "Frijoles cocidos",
+      "k": 127,
+      "p": 8.7,
+      "c": 22.8,
+      "f": 0.5,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [
+        "frejoles",
+        "porotos"
+      ],
+      "source": {
+        "name": "Catálogo original de Nutra",
+        "estimated": true
+      }
+    },
+    {
+      "id": "ins-a23",
+      "name": "Tallarines sancochados",
+      "k": 90,
+      "p": 3.1,
+      "c": 21.3,
+      "f": 0,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A23",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a24",
+      "name": "Galletas de soda",
+      "k": 433,
+      "p": 10.1,
+      "c": 68,
+      "f": 14.7,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A24",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a32",
+      "name": "Cancha tostada",
+      "k": 342,
+      "p": 6.7,
+      "c": 79.8,
+      "f": 2.7,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tostado",
+      "aliases": [
+        "maíz tostado"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A32",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a34",
+      "name": "Choclo fresco en granos",
+      "k": 104,
+      "p": 3.3,
+      "c": 27.8,
+      "f": 0.8,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A34",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a37",
+      "name": "Maicena",
+      "k": 365,
+      "p": 0.3,
+      "c": 91.3,
+      "f": 0.1,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A37",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a39",
+      "name": "Mote sancochado",
+      "k": 103,
+      "p": 2.6,
+      "c": 21.1,
+      "f": 1.3,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A39",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a49",
+      "name": "Pan francés",
+      "k": 277,
+      "p": 8.4,
+      "c": 62.9,
+      "f": 0.2,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A49",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a54",
+      "name": "Quinua cruda",
+      "k": 351,
+      "p": 13.6,
+      "c": 66.6,
+      "f": 5.8,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Crudo y seco",
+      "aliases": [
+        "quinoa",
+        "quinua seca"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A54",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a59",
+      "name": "Hojuelas de quinua",
+      "k": 376,
+      "p": 13.9,
+      "c": 63.1,
+      "f": 7.4,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Seco",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A59",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a173",
+      "name": "Granola de avena y frutos secos",
+      "k": 450,
+      "p": 10.8,
+      "c": 62.8,
+      "f": 20,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A173",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=1"
+      }
+    },
+    {
+      "id": "ins-a186",
+      "name": "Pan integral de molde",
+      "k": 274,
+      "p": 12.4,
+      "c": 49.2,
+      "f": 5.9,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A186",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=1"
+      }
+    },
+    {
+      "id": "ins-a187",
+      "name": "Pan pita envasado",
+      "k": 238,
+      "p": 16.1,
+      "c": 48.1,
+      "f": 0.7,
+      "emoji": "🍞",
+      "category": "Cereales y panes",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A187",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=1"
+      }
+    },
+    {
+      "id": "ins-b26",
+      "name": "Cebolla blanca",
+      "k": 24,
+      "p": 0.9,
+      "c": 7.4,
+      "f": 0.1,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B26",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b39",
+      "name": "Culantro fresco",
+      "k": 34,
+      "p": 3.3,
+      "c": 7,
+      "f": 1.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [
+        "cilantro"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B39",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b43",
+      "name": "Espárragos",
+      "k": 15,
+      "p": 2.2,
+      "c": 3.8,
+      "f": 0.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B43",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b45",
+      "name": "Espinaca negra",
+      "k": 24,
+      "p": 2.8,
+      "c": 4.9,
+      "f": 0.9,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B45",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b53",
+      "name": "Lechuga americana",
+      "k": 7,
+      "p": 0.6,
+      "c": 2.4,
+      "f": 0.1,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B53",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b67",
+      "name": "Pepinillo sin cáscara",
+      "k": 9,
+      "p": 0.5,
+      "c": 2.6,
+      "f": 0.1,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [
+        "pepino"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B67",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b69",
+      "name": "Pimiento rojo",
+      "k": 27,
+      "p": 1.2,
+      "c": 4.6,
+      "f": 1.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B69",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b85",
+      "name": "Zanahoria cruda",
+      "k": 19,
+      "p": 1,
+      "c": 7.6,
+      "f": 0.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B85",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b87",
+      "name": "Zapallo italiano",
+      "k": 14,
+      "p": 0.9,
+      "c": 2.9,
+      "f": 0.2,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [
+        "calabacín",
+        "zucchini"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B87",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b88",
+      "name": "Zapallo loche",
+      "k": 58,
+      "p": 2.6,
+      "c": 16.2,
+      "f": 0.2,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B88",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b89",
+      "name": "Zapallo macre",
+      "k": 47,
+      "p": 2.2,
+      "c": 12.7,
+      "f": 0.1,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B89",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b94",
+      "name": "Ajo fresco",
+      "k": 115,
+      "p": 6.2,
+      "c": 32.6,
+      "f": 0.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [
+        "ajos"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B94",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-b133",
+      "name": "Vainitas sancochadas",
+      "k": 17,
+      "p": 2.2,
+      "c": 6.2,
+      "f": 0.1,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B133",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-t2",
+      "name": "Arvejas frescas",
+      "k": 85,
+      "p": 7.1,
+      "c": 18.8,
+      "f": 0.6,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T2",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-l9",
+      "name": "Champiñones",
+      "k": 22,
+      "p": 3,
+      "c": 5.6,
+      "f": 0.4,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L9",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-b92",
+      "name": "Ají colorado seco",
+      "k": 179,
+      "p": 12.5,
+      "c": 53.5,
+      "f": 6.3,
+      "emoji": "🥬",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B92",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=2"
+      }
+    },
+    {
+      "id": "ins-c12",
+      "name": "Chirimoya",
+      "k": 72,
+      "p": 1.9,
+      "c": 21.6,
+      "f": 0.3,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C12",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c34",
+      "name": "Jugo de limón",
+      "k": 28,
+      "p": 0.5,
+      "c": 9.7,
+      "f": 0.2,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C34",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c40",
+      "name": "Mandarina",
+      "k": 29,
+      "p": 0.6,
+      "c": 8.6,
+      "f": 0.3,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C40",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c41",
+      "name": "Mango",
+      "k": 54,
+      "p": 0.4,
+      "c": 15.9,
+      "f": 0.2,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C41",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c45",
+      "name": "Melón",
+      "k": 21,
+      "p": 0.5,
+      "c": 5.8,
+      "f": 0.1,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C45",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c48",
+      "name": "Naranja",
+      "k": 31,
+      "p": 0.6,
+      "c": 10.1,
+      "f": 0.2,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C48",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c59",
+      "name": "Papaya",
+      "k": 25,
+      "p": 0.4,
+      "c": 8.2,
+      "f": 0.1,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C59",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c69",
+      "name": "Piña",
+      "k": 33,
+      "p": 0.4,
+      "c": 9.8,
+      "f": 0.2,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C69",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-c93",
+      "name": "Uva blanca",
+      "k": 40,
+      "p": 0.3,
+      "c": 11.3,
+      "f": 0.2,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C93",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=4"
+      }
+    },
+    {
+      "id": "ins-c145",
+      "name": "Arándanos frescos",
+      "k": 51,
+      "p": 0.6,
+      "c": 14,
+      "f": 0.1,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C145",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=4"
+      }
+    },
+    {
+      "id": "ins-c155",
+      "name": "Mango kent",
+      "k": 65,
+      "p": 0.7,
+      "c": 18.1,
+      "f": 0,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C155",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=4"
+      }
+    },
+    {
+      "id": "ins-c161",
+      "name": "Palta Hass",
+      "k": 204,
+      "p": 1,
+      "c": 7.8,
+      "f": 23.5,
+      "emoji": "🍊",
+      "category": "Frutas",
+      "preparation": "Crudo",
+      "aliases": [
+        "aguacate",
+        "palta"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "C161",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=4"
+      }
+    },
+    {
+      "id": "ins-f25",
+      "name": "Pavo, carne cruda",
+      "k": 160,
+      "p": 20.4,
+      "c": 0,
+      "f": 8,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F25",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-f35",
+      "name": "Res, carne cruda",
+      "k": 105,
+      "p": 21.3,
+      "c": 0,
+      "f": 1.6,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Crudo",
+      "aliases": [
+        "carne de res"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F35",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-f82",
+      "name": "Pechuga de pollo sancochada sin sal",
+      "k": 150,
+      "p": 30.4,
+      "c": 0,
+      "f": 2.2,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F82",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=7"
+      }
+    },
+    {
+      "id": "ins-f84",
+      "name": "Pierna de pollo sancochada con piel",
+      "k": 175,
+      "p": 23.5,
+      "c": 0,
+      "f": 8.3,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F84",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=7"
+      }
+    },
+    {
+      "id": "ins-f89",
+      "name": "Res molida cruda",
+      "k": 164,
+      "p": 21,
+      "c": 0,
+      "f": 8.3,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F89",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=7"
+      }
+    },
+    {
+      "id": "ins-f108",
+      "name": "Cerdo sancochado sin piel",
+      "k": 202,
+      "p": 32.3,
+      "c": 0,
+      "f": 7.1,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F108",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=7"
+      }
+    },
+    {
+      "id": "ins-f127",
+      "name": "Pechuga y ala de pollo a la brasa",
+      "k": 170,
+      "p": 25.8,
+      "c": 2.3,
+      "f": 6.4,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "A la brasa",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "F127",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=7"
+      }
+    },
+    {
+      "id": "ins-j3",
+      "name": "Huevo entero sancochado",
+      "k": 148,
+      "p": 12.8,
+      "c": 0.8,
+      "f": 9.9,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "J3",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      },
+      "portions": [
+        {
+          "label": "Huevo grande",
+          "grams": 50,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400530/pdf/csfii8991_rep_91-3.pdf"
+        }
+      ]
+    },
+    {
+      "id": "ins-j4",
+      "name": "Huevo entero crudo",
+      "k": 166,
+      "p": 12.7,
+      "c": 2.9,
+      "f": 11.1,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "J4",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-j13",
+      "name": "Huevo de codorniz sancochado",
+      "k": 182,
+      "p": 12.7,
+      "c": 3.9,
+      "f": 12.4,
+      "emoji": "🍗",
+      "category": "Carnes y huevos",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "J13",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-e18",
+      "name": "Anchoveta fresca",
+      "k": 156,
+      "p": 19.1,
+      "c": 0,
+      "f": 8.2,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E18",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-e31",
+      "name": "Bonito asado",
+      "k": 136,
+      "p": 24,
+      "c": 0,
+      "f": 3.7,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Asado",
+      "aliases": [
+        "pescado"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E31",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-e49",
+      "name": "Jurel en conserva",
+      "k": 127,
+      "p": 23.2,
+      "c": 0,
+      "f": 3.8,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "En conserva",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E49",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-e72",
+      "name": "Sardina en aceite en conserva",
+      "k": 242,
+      "p": 20.6,
+      "c": 0,
+      "f": 17.7,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "En conserva",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E72",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-e77",
+      "name": "Tilapia fresca",
+      "k": 100,
+      "p": 18.4,
+      "c": 0.7,
+      "f": 2.1,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E77",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-e98",
+      "name": "Jurel sancochado",
+      "k": 151,
+      "p": 26.5,
+      "c": 0.4,
+      "f": 4,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E98",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-e103",
+      "name": "Trucha sancochada",
+      "k": 168,
+      "p": 22.3,
+      "c": 0.1,
+      "f": 8,
+      "emoji": "🐟",
+      "category": "Pescados",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "E103",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=6"
+      }
+    },
+    {
+      "id": "ins-u37",
+      "name": "Yuca blanca sancochada",
+      "k": 136,
+      "p": 0.5,
+      "c": 36.4,
+      "f": 0.2,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Cocido",
+      "aliases": [
+        "mandioca"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "U37",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-u50",
+      "name": "Oca sin cáscara",
+      "k": 53,
+      "p": 0.7,
+      "c": 15.6,
+      "f": 0,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "U50",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-u53",
+      "name": "Papa canchan",
+      "k": 66,
+      "p": 2.4,
+      "c": 19.1,
+      "f": 0.1,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "U53",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-u82",
+      "name": "Papa \"cóctel\", con cáscara, cruda",
+      "k": 49,
+      "p": 2.2,
+      "c": 14,
+      "f": 0,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "U82",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-u85",
+      "name": "Papa morada sin cáscara",
+      "k": 120,
+      "p": 2.1,
+      "c": 30.2,
+      "f": 0,
+      "emoji": "🥔",
+      "category": "Tubérculos",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "U85",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-t13",
+      "name": "Frejol blanco cocido",
+      "k": 67,
+      "p": 5.1,
+      "c": 17.5,
+      "f": 0.4,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T13",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-t16",
+      "name": "Frejol canario cocido",
+      "k": 43,
+      "p": 5.2,
+      "c": 15.5,
+      "f": 0.5,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [
+        "frijol",
+        "poroto"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T16",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=8"
+      }
+    },
+    {
+      "id": "ins-t53",
+      "name": "Lentejas chicas cocidas",
+      "k": 65,
+      "p": 6.4,
+      "c": 18.3,
+      "f": 0.1,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T53",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-t61",
+      "name": "Arvejas partidas sancochadas",
+      "k": 120,
+      "p": 10.1,
+      "c": 21.8,
+      "f": 1.8,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T61",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-t69",
+      "name": "Frejol negro cocido",
+      "k": 104,
+      "p": 9.8,
+      "c": 22.8,
+      "f": 1.7,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [
+        "frijol negro"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T69",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-t77",
+      "name": "Zarandaja sancochada",
+      "k": 114,
+      "p": 9.9,
+      "c": 25.5,
+      "f": 1,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Cocido",
+      "aliases": [
+        "frejol zarandaja",
+        "cancate"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T77",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-t88",
+      "name": "Tofu crudo",
+      "k": 128,
+      "p": 11,
+      "c": 2.5,
+      "f": 9.7,
+      "emoji": "🫘",
+      "category": "Legumbres",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T88",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-g7",
+      "name": "Leche evaporada entera",
+      "k": 133,
+      "p": 6.3,
+      "c": 10.9,
+      "f": 7.7,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Evaporado",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G7",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-g14",
+      "name": "Queso fresco de vaca",
+      "k": 265,
+      "p": 17.2,
+      "c": 3.6,
+      "f": 20.2,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G14",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-g17",
+      "name": "Yogur de leche entera",
+      "k": 61,
+      "p": 3.5,
+      "c": 4.7,
+      "f": 3.3,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [
+        "yogurt"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G17",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-g21",
+      "name": "Leche descremada",
+      "k": 30,
+      "p": 2.5,
+      "c": 5,
+      "f": 0,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G21",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-g23",
+      "name": "Queso andino",
+      "k": 375,
+      "p": 22.6,
+      "c": 0.6,
+      "f": 31.4,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G23",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-g29",
+      "name": "Queso cottage",
+      "k": 106,
+      "p": 12.5,
+      "c": 2.8,
+      "f": 4.8,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G29",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-g38",
+      "name": "Yogur griego natural sin azúcar",
+      "k": 79,
+      "p": 4,
+      "c": 7.9,
+      "f": 3.9,
+      "emoji": "🥛",
+      "category": "Lácteos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [
+        "yogurt"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G38",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "ins-d22",
+      "name": "Nueces",
+      "k": 654,
+      "p": 14.8,
+      "c": 10.5,
+      "f": 69.1,
+      "emoji": "🥜",
+      "category": "Frutos secos y semillas",
+      "preparation": "Seco",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "D22",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-d24",
+      "name": "Semillas de chía",
+      "k": 362,
+      "p": 19.9,
+      "c": 35.3,
+      "f": 32.5,
+      "emoji": "🥜",
+      "category": "Frutos secos y semillas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "D24",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-d39",
+      "name": "Semillas de ajonjolí",
+      "k": 525,
+      "p": 17.7,
+      "c": 23.5,
+      "f": 49.7,
+      "emoji": "🥜",
+      "category": "Frutos secos y semillas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [
+        "sésamo"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "D39",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-d48",
+      "name": "Pasta de maní con sal",
+      "k": 642,
+      "p": 26,
+      "c": 18.5,
+      "f": 51.6,
+      "emoji": "🥜",
+      "category": "Frutos secos y semillas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [
+        "mantequilla de maní",
+        "cacahuate"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "D48",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      }
+    },
+    {
+      "id": "ins-d44",
+      "name": "Aceite de oliva extravirgen",
+      "k": 883,
+      "p": 0,
+      "c": 0,
+      "f": 99.9,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "D44",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=5"
+      },
+      "portions": [
+        {
+          "label": "Cucharada rasa",
+          "grams": 13.5,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400525/Data/hg72/hg72_2002.pdf"
+        }
+      ]
+    },
+    {
+      "id": "ins-l14",
+      "name": "Paprika molida",
+      "k": 362,
+      "p": 14.5,
+      "c": 49.5,
+      "f": 17.9,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L14",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-l18",
+      "name": "Caldo de pollo",
+      "k": 89,
+      "p": 0.2,
+      "c": 0,
+      "f": 9.8,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L18",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-l20",
+      "name": "Canela molida",
+      "k": 261,
+      "p": 3.9,
+      "c": 79.9,
+      "f": 3.2,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L20",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-l48",
+      "name": "Salsa de soya",
+      "k": 60,
+      "p": 10.5,
+      "c": 5.6,
+      "f": 0.1,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [
+        "sillao",
+        "soya"
+      ],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L48",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-l50",
+      "name": "Vinagre",
+      "k": 21,
+      "p": 0,
+      "c": 6,
+      "f": 0,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L50",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-k2",
+      "name": "Azúcar rubia",
+      "k": 380,
+      "p": 0,
+      "c": 97.5,
+      "f": 0,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "K2",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-k4",
+      "name": "Miel de abeja",
+      "k": 330,
+      "p": 0,
+      "c": 85.6,
+      "f": 0,
+      "emoji": "🫙",
+      "category": "Aceites y condimentos",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "K4",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-h5",
+      "name": "Chicha morada con azúcar",
+      "k": 20,
+      "p": 0,
+      "c": 4.9,
+      "f": 0,
+      "emoji": "🥤",
+      "category": "Bebidas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "H5",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-h16",
+      "name": "Café sin azúcar",
+      "k": 2,
+      "p": 0.1,
+      "c": 0.6,
+      "f": 0,
+      "emoji": "🥤",
+      "category": "Bebidas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "H16",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-h27",
+      "name": "Chicha morada sin azúcar",
+      "k": 2,
+      "p": 0.1,
+      "c": 0.2,
+      "f": 0.2,
+      "emoji": "🥤",
+      "category": "Bebidas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "H27",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-t72",
+      "name": "Bebida de soya UHT",
+      "k": 49,
+      "p": 3,
+      "c": 6,
+      "f": 1.8,
+      "emoji": "🥤",
+      "category": "Bebidas",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "T72",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=9"
+      }
+    },
+    {
+      "id": "ins-a74",
+      "name": "Barra de avena, maní y pasas",
+      "k": 391,
+      "p": 5.8,
+      "c": 74.9,
+      "f": 9.4,
+      "emoji": "📦",
+      "category": "Envasados",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A74",
+        "url": "https://tablasperuanas.ins.gob.pe/"
+      }
+    },
+    {
+      "id": "ins-a161",
+      "name": "Alfajor de leche y maní envasado",
+      "k": 502,
+      "p": 8.1,
+      "c": 61.8,
+      "f": 26.5,
+      "emoji": "📦",
+      "category": "Envasados",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "A161",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=1"
+      }
+    },
+    {
+      "id": "ins-l44",
+      "name": "Papas fritas en hojuelas envasadas",
+      "k": 524,
+      "p": 6.1,
+      "c": 53.8,
+      "f": 35.1,
+      "emoji": "📦",
+      "category": "Envasados",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L44",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-l46",
+      "name": "Chifles envasados",
+      "k": 500,
+      "p": 2.1,
+      "c": 63.5,
+      "f": 30.1,
+      "emoji": "📦",
+      "category": "Envasados",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "L46",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=10"
+      }
+    },
+    {
+      "id": "ins-g26",
+      "name": "Yogur bebible de fresa",
+      "k": 78,
+      "p": 2.7,
+      "c": 14.5,
+      "f": 1.2,
+      "emoji": "📦",
+      "category": "Envasados",
+      "preparation": "Tal como se vende o sirve",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "G26",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=11"
+      }
+    },
+    {
+      "id": "usda-20037",
+      "name": "Arroz integral de grano largo cocido",
+      "k": 123,
+      "p": 2.74,
+      "c": 25.58,
+      "f": 0.97,
+      "emoji": "🍚",
+      "category": "Cereales y panes",
+      "preparation": "Cocido",
+      "aliases": [
+        "arroz marrón"
+      ],
+      "source": {
+        "name": "USDA · SR28",
+        "code": "20037",
+        "url": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf"
+      },
+      "portions": [
+        {
+          "label": "Taza",
+          "grams": 202,
+          "url": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf"
+        }
+      ]
+    },
+    {
+      "id": "ins-b131",
+      "name": "Pimiento amarillo",
+      "k": 24,
+      "p": 1,
+      "f": 0.2,
+      "c": 6.3,
+      "emoji": "🌶️",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B131",
+        "url": "https://tablasperuanas.ins.gob.pe/?page=3"
+      }
+    },
+    {
+      "id": "ins-b3",
+      "name": "Ají amarillo fresco",
+      "k": 39,
+      "p": 0.9,
+      "c": 8.8,
+      "f": 0.7,
+      "emoji": "🌶️",
+      "category": "Verduras",
+      "preparation": "Crudo",
+      "aliases": [],
+      "source": {
+        "name": "INS · Tablas peruanas",
+        "code": "B3",
+        "url": "https://tablasperuanas.ins.gob.pe/node/625"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "name": "Bowl de pollo y quinua",
+      "emoji": "🥗",
+      "desc": "Una comida sencilla, fresca y llena de color.",
+      "items": [
+        [
+          "f1",
+          150
+        ],
+        [
+          "f12",
+          150
+        ],
+        [
+          "f19",
+          100
+        ],
+        [
+          "f5",
+          50
+        ]
+      ],
+      "steps": "Cocina la quinua y el pollo por separado. Corta el tomate y la palta. Sirve todo en un bowl y sazona a tu gusto.",
+      "id": "bowl-pollo-quinua",
+      "meal": 1,
+      "yieldGrams": 450
+    },
+    {
+      "name": "Avena con plátano",
+      "emoji": "🥣",
+      "desc": "Tu desayuno de siempre, con cantidades claras.",
+      "items": [
+        [
+          "f3",
+          50
+        ],
+        [
+          "f7",
+          200
+        ],
+        [
+          "f4",
+          100
+        ]
+      ],
+      "steps": "Cocina la avena con la leche durante 5 minutos. Añade el plátano en rodajas y canela si deseas.",
+      "id": "avena-platano",
+      "meal": 0,
+      "yieldGrams": 350
+    },
+    {
+      "name": "Tostadas con palta y huevo",
+      "emoji": "🥑",
+      "desc": "Rápido de preparar, fácil de repetir.",
+      "items": [
+        [
+          "f6",
+          70
+        ],
+        [
+          "f5",
+          60
+        ],
+        [
+          "f0",
+          100
+        ]
+      ],
+      "steps": "Tuesta el pan, aplasta la palta y distribúyela encima. Añade los huevos cocidos en rodajas.",
+      "id": "tostadas-palta-huevo",
+      "meal": 0,
+      "yieldGrams": 230
+    },
+    {
+      "name": "Yogur con frutos rojos",
+      "emoji": "🫐",
+      "desc": "Un snack cremoso para cualquier momento.",
+      "items": [
+        [
+          "f8",
+          170
+        ],
+        [
+          "f15",
+          80
+        ],
+        [
+          "f17",
+          15
+        ]
+      ],
+      "steps": "Sirve el yogur con los arándanos y las almendras picadas.",
+      "id": "yogur-frutos-rojos",
+      "meal": 3,
+      "yieldGrams": 265
+    },
+    {
+      "name": "Atún con arroz y verduras",
+      "emoji": "🍚",
+      "desc": "Ingredientes prácticos para tu almuerzo.",
+      "items": [
+        [
+          "f9",
+          120
+        ],
+        [
+          "f2",
+          180
+        ],
+        [
+          "f18",
+          150
+        ],
+        [
+          "f16",
+          5
+        ]
+      ],
+      "steps": "Cocina el arroz y el brócoli. Mezcla con el atún escurrido y añade el aceite al servir.",
+      "id": "atun-arroz-verduras",
+      "meal": 1,
+      "yieldGrams": 455
+    },
+    {
+      "name": "Lentejas con camote",
+      "emoji": "🍠",
+      "desc": "Un plato de casa con proteína vegetal.",
+      "items": [
+        [
+          "f13",
+          200
+        ],
+        [
+          "f11",
+          150
+        ],
+        [
+          "f19",
+          100
+        ],
+        [
+          "f16",
+          5
+        ]
+      ],
+      "steps": "Sirve las lentejas cocidas junto al camote. Acompaña con tomate y aceite de oliva.",
+      "id": "lentejas-camote",
+      "meal": 2,
+      "yieldGrams": 455
+    },
+    {
+      "id": "pan-frances-palta",
+      "name": "Pan francés con palta y huevo",
+      "meal": 0,
+      "emoji": "🥑",
+      "items": [
+        [
+          "ins-a49",
+          60
+        ],
+        [
+          "ins-c161",
+          45
+        ],
+        [
+          "f0",
+          50
+        ]
+      ],
+      "yieldGrams": 155,
+      "steps": "Abre el pan y rellénalo con palta machacada y huevo cocido en rodajas."
+    },
+    {
+      "id": "quinua-con-leche",
+      "name": "Quinua con leche y canela",
+      "meal": 0,
+      "emoji": "🥣",
+      "items": [
+        [
+          "f12",
+          130
+        ],
+        [
+          "f7",
+          180
+        ],
+        [
+          "ins-l20",
+          1
+        ],
+        [
+          "ins-k4",
+          8
+        ]
+      ],
+      "yieldGrams": 305,
+      "steps": "Calienta la quinua cocida con la leche y la canela. Añade la miel al servir."
+    },
+    {
+      "id": "yogur-granola",
+      "name": "Yogur con granola y mango",
+      "meal": 0,
+      "emoji": "🥭",
+      "items": [
+        [
+          "ins-g38",
+          150
+        ],
+        [
+          "ins-a173",
+          35
+        ],
+        [
+          "ins-c155",
+          100
+        ]
+      ],
+      "yieldGrams": 285,
+      "steps": "Coloca el yogur en un tazón y añade el mango en cubos y la granola."
+    },
+    {
+      "id": "batido-platano-avena",
+      "name": "Batido de plátano y avena",
+      "meal": 0,
+      "emoji": "🥛",
+      "items": [
+        [
+          "f4",
+          118
+        ],
+        [
+          "f7",
+          200
+        ],
+        [
+          "f3",
+          30
+        ]
+      ],
+      "yieldGrams": 348,
+      "steps": "Licúa la leche con el plátano y la avena hasta que quede uniforme."
+    },
+    {
+      "id": "arroz-con-pollo",
+      "name": "Arroz con pollo y culantro",
+      "meal": 1,
+      "emoji": "🍗",
+      "items": [
+        [
+          "f2",
+          170
+        ],
+        [
+          "f1",
+          130
+        ],
+        [
+          "ins-b39",
+          15
+        ],
+        [
+          "ins-t2",
+          35
+        ],
+        [
+          "ins-b85",
+          35
+        ],
+        [
+          "ins-b26",
+          30
+        ],
+        [
+          "f16",
+          8
+        ]
+      ],
+      "yieldGrams": 405,
+      "steps": "Prepara un aderezo con cebolla y culantro. Cocina las verduras y mézclalas con el arroz y el pollo cocidos."
+    },
+    {
+      "id": "lomo-saltado",
+      "name": "Lomo saltado con arroz y papa",
+      "meal": 1,
+      "emoji": "🍚",
+      "items": [
+        [
+          "ins-f35",
+          150
+        ],
+        [
+          "f2",
+          130
+        ],
+        [
+          "f10",
+          100
+        ],
+        [
+          "ins-b26",
+          55
+        ],
+        [
+          "f19",
+          70
+        ],
+        [
+          "ins-l48",
+          12
+        ],
+        [
+          "ins-l50",
+          8
+        ],
+        [
+          "f16",
+          10
+        ]
+      ],
+      "yieldGrams": 490,
+      "steps": "Saltea la carne en tiras y añade la cebolla, el tomate, el sillao y el vinagre. Sirve con arroz cocido y papa sancochada dorada."
+    },
+    {
+      "id": "aji-de-gallina",
+      "name": "Ají de gallina casero",
+      "meal": 1,
+      "emoji": "🍲",
+      "items": [
+        [
+          "f1",
+          110
+        ],
+        [
+          "ins-g7",
+          80
+        ],
+        [
+          "ins-a49",
+          30
+        ],
+        [
+          "ins-d22",
+          10
+        ],
+        [
+          "ins-b26",
+          40
+        ],
+        [
+          "ins-b3",
+          25
+        ],
+        [
+          "f16",
+          6
+        ],
+        [
+          "f2",
+          110
+        ],
+        [
+          "f10",
+          90
+        ]
+      ],
+      "yieldGrams": 450,
+      "steps": "Licúa la leche evaporada con el pan y las nueces. Cocina la salsa con cebolla, ají amarillo. Incorpora el pollo deshilachado y sirve con arroz y papa."
+    },
+    {
+      "id": "menestra-con-arroz",
+      "name": "Frejoles canarios con arroz",
+      "meal": 1,
+      "emoji": "🫘",
+      "items": [
+        [
+          "ins-t16",
+          170
+        ],
+        [
+          "f2",
+          130
+        ],
+        [
+          "ins-b26",
+          35
+        ],
+        [
+          "ins-b94",
+          5
+        ],
+        [
+          "f16",
+          7
+        ]
+      ],
+      "yieldGrams": 332,
+      "steps": "Sofríe la cebolla y el ajo, añade los frejoles cocidos y sirve con arroz."
+    },
+    {
+      "id": "tallarines-rojos",
+      "name": "Tallarines rojos con carne",
+      "meal": 1,
+      "emoji": "🍝",
+      "items": [
+        [
+          "ins-a23",
+          190
+        ],
+        [
+          "ins-f89",
+          115
+        ],
+        [
+          "f19",
+          140
+        ],
+        [
+          "ins-b26",
+          40
+        ],
+        [
+          "ins-b85",
+          35
+        ],
+        [
+          "f16",
+          8
+        ]
+      ],
+      "yieldGrams": 450,
+      "steps": "Cocina la carne molida con la cebolla, el tomate y la zanahoria hasta obtener una salsa. Mezcla con los tallarines sancochados."
+    },
+    {
+      "id": "trucha-arroz-integral",
+      "name": "Trucha con arroz integral y vainitas",
+      "meal": 1,
+      "emoji": "🐟",
+      "items": [
+        [
+          "ins-e103",
+          145
+        ],
+        [
+          "usda-20037",
+          140
+        ],
+        [
+          "ins-b133",
+          100
+        ],
+        [
+          "f16",
+          6
+        ],
+        [
+          "ins-c34",
+          10
+        ]
+      ],
+      "yieldGrams": 401,
+      "steps": "Sirve la trucha sancochada con arroz y vainitas. Aliña con aceite y jugo de limón."
+    },
+    {
+      "id": "tortilla-verduras",
+      "name": "Tortilla de espinaca y champiñones",
+      "meal": 2,
+      "emoji": "🍳",
+      "items": [
+        [
+          "ins-j4",
+          100
+        ],
+        [
+          "ins-b45",
+          50
+        ],
+        [
+          "ins-l9",
+          70
+        ],
+        [
+          "ins-b26",
+          30
+        ],
+        [
+          "f16",
+          6
+        ]
+      ],
+      "yieldGrams": 215,
+      "steps": "Saltea las verduras, añade los huevos batidos y cocina la tortilla hasta que cuaje."
+    },
+    {
+      "id": "sopa-de-pollo",
+      "name": "Sopa de pollo con fideos",
+      "meal": 2,
+      "emoji": "🍜",
+      "items": [
+        [
+          "ins-l18",
+          280
+        ],
+        [
+          "f1",
+          100
+        ],
+        [
+          "ins-a23",
+          70
+        ],
+        [
+          "ins-b85",
+          45
+        ],
+        [
+          "f10",
+          70
+        ]
+      ],
+      "yieldGrams": 540,
+      "steps": "Hierve la zanahoria en el caldo hasta que esté tierna. Añade el pollo, los fideos y la papa ya cocidos."
+    },
+    {
+      "id": "ensalada-atun",
+      "name": "Ensalada de atún con choclo",
+      "meal": 2,
+      "emoji": "🥗",
+      "items": [
+        [
+          "f9",
+          110
+        ],
+        [
+          "ins-b53",
+          60
+        ],
+        [
+          "f19",
+          90
+        ],
+        [
+          "ins-b67",
+          80
+        ],
+        [
+          "ins-a34",
+          60
+        ],
+        [
+          "ins-c34",
+          15
+        ],
+        [
+          "f16",
+          7
+        ]
+      ],
+      "yieldGrams": 420,
+      "steps": "Cocina el choclo y déjalo enfriar. Mezcla con las verduras y el atún escurrido. Aliña con limón y aceite."
+    },
+    {
+      "id": "pescado-camote",
+      "name": "Bonito asado con camote y ensalada",
+      "meal": 2,
+      "emoji": "🐟",
+      "items": [
+        [
+          "ins-e31",
+          145
+        ],
+        [
+          "f11",
+          150
+        ],
+        [
+          "ins-b53",
+          60
+        ],
+        [
+          "f19",
+          80
+        ],
+        [
+          "ins-c34",
+          12
+        ]
+      ],
+      "yieldGrams": 447,
+      "steps": "Sirve el bonito asado con camote cocido y ensalada de lechuga y tomate con limón."
+    },
+    {
+      "id": "crema-zapallo",
+      "name": "Crema de zapallo y queso fresco",
+      "meal": 2,
+      "emoji": "🥣",
+      "items": [
+        [
+          "ins-b89",
+          230
+        ],
+        [
+          "ins-b26",
+          35
+        ],
+        [
+          "ins-g7",
+          75
+        ],
+        [
+          "ins-l18",
+          160
+        ],
+        [
+          "ins-g14",
+          35
+        ],
+        [
+          "f16",
+          6
+        ]
+      ],
+      "yieldGrams": 470,
+      "steps": "Cocina el zapallo y la cebolla en el caldo, licúa con la leche evaporada y sirve con queso fresco."
+    },
+    {
+      "id": "fruta-con-nueces",
+      "name": "Papaya y piña con nueces",
+      "meal": 3,
+      "emoji": "🍍",
+      "items": [
+        [
+          "ins-c59",
+          130
+        ],
+        [
+          "ins-c69",
+          100
+        ],
+        [
+          "ins-d22",
+          20
+        ]
+      ],
+      "yieldGrams": 250,
+      "steps": "Corta la fruta en cubos y acompáñala con las nueces."
+    },
+    {
+      "id": "yogur-chia",
+      "name": "Yogur natural con chía y fresas",
+      "meal": 3,
+      "emoji": "🍓",
+      "items": [
+        [
+          "ins-g17",
+          160
+        ],
+        [
+          "ins-d24",
+          10
+        ],
+        [
+          "f22",
+          100
+        ]
+      ],
+      "yieldGrams": 270,
+      "steps": "Mezcla la chía con el yogur y añade las fresas picadas."
+    },
+    {
+      "id": "cancha-queso",
+      "name": "Cancha tostada con queso fresco",
+      "meal": 3,
+      "emoji": "🧀",
+      "items": [
+        [
+          "ins-a32",
+          30
+        ],
+        [
+          "ins-g14",
+          45
+        ]
+      ],
+      "yieldGrams": 75,
+      "steps": "Sirve la cancha tostada junto al queso fresco cortado en cubos."
+    }
+  ],
+  "legacyRecipeIds": [
+    "bowl-pollo-quinua",
+    "avena-platano",
+    "tostadas-palta-huevo",
+    "yogur-frutos-rojos",
+    "atun-arroz-verduras",
+    "lentejas-camote"
+  ]
+}

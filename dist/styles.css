@@ -12,3 +12,19 @@
   nav {padding-inline: 6px}
   nav button {padding-inline: 2px}
 }
+
+.portion-fields {display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1.4fr);gap:12px}
+.portion-fields select {min-width:0}
+.portion-preview {background:#eff4e7;border-radius:12px;padding:10px 12px;font-weight:650}
+.result .result-detail {display:block;white-space:normal;margin-top:3px}
+.result span {min-width:0}
+.recipe-grid {margin-top:12px}
+.recipe-grid .recipe h3 {margin-top:10px}
+.shopping-item input {width:20px;min-height:20px;flex:none}
+.shopping-item b {white-space:nowrap}
+@media (max-width:390px) {
+  .portion-fields {grid-template-columns:minmax(0, 1fr);gap:0}
+  .portion-fields label {margin-bottom:0}
+  .recipe-grid {grid-template-columns:minmax(0, 1fr)}
+  .result {align-items:flex-start;flex-direction:column;gap:4px}
+}

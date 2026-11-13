@@ -2,7 +2,7 @@
 'use strict';
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {promisify}=require('node:util'),{DatabaseSync}=require('node:sqlite');
-const {validState,fresh}=require('./src/validation.cjs');
+const {validState,fresh,normalizePlan}=require('./src/validation.cjs');
 const derive=promisify(crypto.scrypt),hash=x=>crypto.createHash('sha256').update(x).digest('hex'),token=()=>crypto.randomBytes(32).toString('hex');
 const equal=(a,b)=>typeof a==='string'&&typeof b==='string'&&Buffer.byteLength(a)===Buffer.byteLength(b)&&crypto.timingSafeEqual(Buffer.from(a),Buffer.from(b));
 const fail=(status,message)=>Object.assign(new Error(message),{status});
@@ -110,10 +110,10 @@ await limit('user:'+s.user_id,180,60000);
 if(req.method!=='GET'&&!equal(req.headers['x-csrf-token'],s.csrf))throw fail(403,'Verificación de sesión inválida.');
 if(p==='/api/auth/me'&&req.method==='GET'){const u=await db.prepare('SELECT email FROM users WHERE id=?').get(s.user_id);return send(res,200,{csrf:s.csrf,email:u.email})}
 if(p==='/api/auth/logout'&&req.method==='POST'){await db.prepare('DELETE FROM sessions WHERE id=?').run(s.id);cookie(res,'',0);return send(res,200,{ok:true})}
-if(p==='/api/state'&&req.method==='GET'){const u=await db.prepare('SELECT state,version FROM users WHERE id=?').get(s.user_id);return send(res,200,{state:JSON.parse(u.state),version:u.version})}
+if(p==='/api/state'&&req.method==='GET'){const u=await db.prepare('SELECT state,version FROM users WHERE id=?').get(s.user_id);return send(res,200,{state:normalizePlan(JSON.parse(u.state)),version:u.version})}
 if(p==='/api/state'&&req.method==='PUT'){
 await limit('save:'+s.user_id,90,60000);const b=await body(req);if(!b||!Number.isInteger(b.version)||b.version<0||!validState(b.state))throw fail(400,'Los registros contienen valores inválidos o exceden el límite.');
-const result=await db.prepare('UPDATE users SET state=?,version=version+1 WHERE id=? AND version=?').run(JSON.stringify(b.state),s.user_id,b.version);if(!result.changes)throw fail(409,'Tus datos cambiaron en otra sesión. Recarga antes de continuar.');
+const result=await db.prepare('UPDATE users SET state=?,version=version+1 WHERE id=? AND version=?').run(JSON.stringify(normalizePlan(b.state)),s.user_id,b.version);if(!result.changes)throw fail(409,'Tus datos cambiaron en otra sesión. Recarga antes de continuar.');
 return send(res,200,{version:b.version+1})}
 if(p.startsWith('/api/food/')&&req.method==='GET'){
 await limit('food:'+s.user_id,20,60000);await limit('food-global',100,60000);

@@ -62,3 +62,13 @@ try {
 ```
 
 La migración lee SQLite en modo de solo lectura. Copia la cuenta seleccionada y sus registros. El primer acceso en la nube crea una sesión nueva.
+
+## Catálogo y porciones
+
+El catálogo incluye 124 alimentos y 24 recetas. Los alimentos nuevos indican su preparación y la referencia de composición por 100 g. Los valores del catálogo original se conservan como aproximaciones. Los productos por código de barras se consultan en Open Food Facts.
+
+- Los platos caseros calculan sus valores a partir de los ingredientes y de un peso final estimado. Una fracción de la receta se registra como una sola entrada en el diario.
+- Las medidas de referencia muestran su equivalencia aproximada en gramos. En `Mis medidas`, escribe el peso de una unidad de tu vaso, taza, cuchara o puñado. El agua se registra en mililitros.
+- Los planes guardan IDs de recetas. La API reconoce los seis índices de la versión anterior y los convierte al leer o guardar un plan.
+
+Ejecuta `npm run test:catalog` para verificar referencias, medidas, compatibilidad de planes y guardado con recarga.
