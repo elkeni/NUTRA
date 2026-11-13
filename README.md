@@ -39,6 +39,26 @@ Ejecuta `npm test` para verificar autenticación, aislamiento de cuentas, valida
 
 SQLite se guarda en `data/` por defecto. Puedes indicar otra ruta mediante `DATA_DIR`. Guarda `.env`, tus bases y las exportaciones personales fuera del repositorio. Para respaldar SQLite, usa su mecanismo de copia de seguridad o detén el servidor antes de copiar la carpeta de datos.
 
-El despliegue actual requiere un servidor Node.js con almacenamiento persistente y un proxy HTTPS que preserve `Host`. Configura `NODE_ENV=production`, establece `APP_ORIGIN` con la URL pública exacta y autoriza el nuevo hostname en Turnstile. La publicación en Vercel requiere adaptar el servidor y migrar el almacenamiento a una base persistente externa.
+El despliegue actual requiere un servidor Node.js con almacenamiento persistente y un proxy HTTPS que preserve `Host`. Configura `NODE_ENV=production`, establece `APP_ORIGIN` con la URL pública exacta y autoriza el nuevo hostname en Turnstile. Para Vercel, usa los pasos de Supabase que se indican abajo.
 
 El backend protege las contraseñas con scrypt, verifica Turnstile en el servidor y aplica protección CSRF y límites de solicitudes. Para publicar una instancia, protege también el disco y sus copias de seguridad.
+
+## Vercel y Supabase
+
+1. En Supabase, abre **Connect → Transaction pooler** y completa la contraseña en la cadena. Si tiene caracteres reservados, codifica la contraseña para la URL.
+2. Ejecuta `npm install`. Luego migra tu cuenta desde PowerShell usando el bloque siguiente. El script crea el esquema privado y evita sobrescribir cuentas existentes.
+3. En Vercel Hobby, importa el repositorio con Node.js 24. Nutra usa `server.ts` como entrada. Configura `DATABASE_URL`, `ALLOWED_EMAILS`, `REGISTRATION_CODE`, `TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY` en Production.
+4. Nutra usa `VERCEL_PROJECT_PRODUCTION_URL` si `APP_ORIGIN` está vacío. Si Vercel no expone esa variable, configura `APP_ORIGIN` con la URL HTTPS exacta y vuelve a desplegar. Agrega el hostname a Turnstile y prueba iniciar sesión y guardar un alimento desde el celular.
+
+```powershell
+$dbSecret = Read-Host 'Pega la cadena privada de Supabase' -AsSecureString
+try {
+    $env:DATABASE_URL = [System.Net.NetworkCredential]::new('', $dbSecret).Password
+    node scripts/migrate-sqlite.cjs 'D:\app-registro-calorias\data\nutra.sqlite' 'tu-correo@example.com'
+} finally {
+    Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+    $dbSecret.Dispose()
+}
+```
+
+La migración lee SQLite en modo de solo lectura. Copia la cuenta seleccionada y sus registros. El primer acceso en la nube crea una sesión nueva.
