@@ -1,7 +1,7 @@
 
 'use strict';
 const $=s=>document.querySelector(s),meals=['Desayuno','Almuerzo','Cena','Snacks'],icons=['☀','🥗','☾','🍎'];
-let state=null,version=0,csrf='',account='',page='Diario',date=today(),base=[],recipes=[],config={},busy=false,authMode='login',widget=null,tsPromise;
+let state=null,version=0,csrf='',account='',page='Diario',date=today(),base=[],recipes=[],config={},busy=false,authMode='login',widget=null,captchaToken='',tsPromise;
 function today(d=new Date()){return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const round=n=>Math.round(n);
@@ -15,9 +15,73 @@ async function persist(change){if(busy)return;busy=true;const prior=structuredCl
 function modal(title,body){$('#modal').innerHTML='<div class="between"><h2>'+esc(title)+'</h2>'+button('✕','close','','text-btn')+'</div>'+body;if(!$('#modal').open)$('#modal').showModal()}
 function close(){ $('#modal').close()}
 function heading(title,sub){return '<div class="heading"><h1>'+title+'</h1><p>'+sub+'</p></div>'}
-async function loadTurnstile(){if(window.turnstile)return;if(!tsPromise)tsPromise=new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=resolve;s.onerror=()=>reject(Error('No se pudo cargar la verificación. Revisa tu conexión.'));document.head.appendChild(s)});return tsPromise}
-async function auth(){if(widget!==null&&window.turnstile){window.turnstile.remove(widget);widget=null}$('#app').innerHTML='<main class="auth"><div class="brand">nutra<b>●</b></div>'+heading('Tu bienestar, contigo.','Registra tus comidas y acompaña tu progreso, estés donde estés.')+'<div class="card"><div class="tabs">'+button('Ingresar','mode','data-mode="login"',authMode==='login'?'':'quiet')+button('Crear cuenta','mode','data-mode="register"',authMode==='register'?'':'quiet')+'</div><form id="auth-form">'+(authMode==='register'?'<label>Tu nombre<input name="name" autocomplete="given-name" maxlength="50" required></label>':'')+'<label>Correo electrónico<input type="email" name="email" autocomplete="username" maxlength="254" required></label><label>Contraseña<input type="password" name="password" autocomplete="'+(authMode==='register'?'new-password':'current-password')+'" minlength="15" maxlength="128" required></label><small>Usa una frase de al menos 15 caracteres.</small>'+(authMode==='register'?'<label>Código de invitación<input name="invitation" autocomplete="off" minlength="32" maxlength="256" required></label><label>Confirmar contraseña<input type="password" name="confirm" autocomplete="new-password" minlength="15" maxlength="128" required></label>':'')+'<div class="hp" aria-hidden="true"><label>Deja este campo vacío<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="note">Espacio personal. Solo pueden registrarse los correos autorizados por el propietario.</p><div id="captcha"></div><p id="auth-error" class="error hidden" role="alert"></p><button class="wide" id="auth-submit" '+(!config.configured?'disabled':'')+'>'+(authMode==='register'?'Crear mi cuenta':'Entrar a Nutra')+'</button></form></div><p class="note">'+(config.configured?'Tus registros se guardan en tu cuenta. Cierra sesión en dispositivos compartidos.':'Configuración pendiente: el propietario debe activar Turnstile y autorizar su correo en el servidor. El acceso permanece bloqueado hasta entonces.')+'</p></main>';
-if(config.configured)try{await loadTurnstile();if($('#captcha'))widget=window.turnstile.render('#captcha',{sitekey:config.siteKey,action:authMode,theme:'light',size:'flexible'})}catch(e){authError(e.message)}}
+async function loadTurnstile(){
+  if(window.turnstile)return;
+  if(!tsPromise)tsPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    script.async=true;
+    script.onload=resolve;
+    script.onerror=()=>{
+      script.remove();
+      tsPromise=null;
+      reject(Error('No se pudo cargar la verificación. Revisa tu conexión.'));
+    };
+    document.head.appendChild(script);
+  });
+  return tsPromise;
+}
+function updateAuthSubmit(){
+  const form=$('#auth-form');
+  if(form)$('#auth-submit').disabled=!captchaToken||form.dataset.submitting==='true';
+}
+function captchaStatus(message='',canRetry=false){
+  $('#captcha-status').textContent=message;
+  $('#captcha-retry').classList.toggle('hidden',!canRetry);
+  updateAuthSubmit();
+}
+async function mountCaptcha(){
+  const container=$('#captcha');
+  captchaStatus('Cargando verificación…');
+  try{
+    await loadTurnstile();
+    if(container!==$('#captcha'))return;
+    const onFailure=message=>{
+      if(container!==$('#captcha'))return;
+      captchaToken='';
+      captchaStatus(message,true);
+    };
+    widget=window.turnstile.render(container,{
+      sitekey:config.siteKey,action:authMode,theme:'light',size:container.clientWidth<300?'compact':'flexible',retry:'never',
+      'refresh-expired':'never','refresh-timeout':'never',
+      callback(token){
+        if(container!==$('#captcha'))return;
+        captchaToken=token;
+        captchaStatus();
+      },
+      'error-callback'(){
+        onFailure('No se completó la verificación. Puedes intentarlo de nuevo.');
+        return true;
+      },
+      'expired-callback'(){
+        onFailure('La verificación venció. Inténtalo de nuevo.');
+      },
+      'timeout-callback'(){
+        onFailure('Se agotó el tiempo de verificación. Inténtalo de nuevo.');
+      }
+    });
+  }catch(error){
+    if(container===$('#captcha'))captchaStatus(error.message,true);
+  }
+}
+function retryCaptcha(){
+  captchaToken='';
+  if(widget===null)return mountCaptcha();
+  captchaStatus('Verificando…');
+  window.turnstile.reset(widget);
+}
+async function auth(){captchaToken='';if(widget!==null&&window.turnstile){window.turnstile.remove(widget);widget=null}$('#app').innerHTML='<main class="auth"><div class="brand">nutra<b>●</b></div>'+heading('Tu bienestar, contigo.','Registra tus comidas y acompaña tu progreso, estés donde estés.')+'<div class="card"><div class="tabs">'+button('Ingresar','mode','data-mode="login"',authMode==='login'?'':'quiet')+button('Crear cuenta','mode','data-mode="register"',authMode==='register'?'':'quiet')+'</div><form id="auth-form">'+(authMode==='register'?'<label>Tu nombre<input name="name" autocomplete="given-name" maxlength="50" required></label>':'')+'<label>Correo electrónico<input type="email" name="email" autocomplete="username" maxlength="254" required></label><label>Contraseña<input type="password" name="password" autocomplete="'+(authMode==='register'?'new-password':'current-password')+'" minlength="15" maxlength="128" required></label><small>Usa una frase de al menos 15 caracteres.</small>'+(authMode==='register'?'<label>Código de invitación<input name="invitation" autocomplete="off" minlength="32" maxlength="256" required></label><label>Confirmar contraseña<input type="password" name="confirm" autocomplete="new-password" minlength="15" maxlength="128" required></label>':'')+'<div class="hp" aria-hidden="true"><label>Deja este campo vacío<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="note">Espacio personal. Solo pueden registrarse los correos autorizados por el propietario.</p><div id="captcha"></div><p id="captcha-status" class="note" role="status"></p><button type="button" id="captcha-retry" class="quiet hidden" data-action="retry-captcha">Reintentar verificación</button><p id="auth-error" class="error hidden" role="alert"></p><button class="wide" id="auth-submit" disabled>'+(authMode==='register'?'Crear mi cuenta':'Entrar a Nutra')+'</button></form></div><p class="note">'+(config.configured?'Tus registros se guardan en tu cuenta. Cierra sesión en dispositivos compartidos.':'Configuración pendiente: el propietario debe activar Turnstile y autorizar su correo en el servidor. El acceso permanece bloqueado hasta entonces.')+'</p></main>';
+if(config.configured)await mountCaptcha();}
 function authError(t){$('#auth-error').textContent=t;$('#auth-error').classList.remove('hidden')}
 function render(){if(!state)return auth();$('#app').innerHTML='<main class="shell"><header class="top"><div class="brand">nutra<b>●</b></div><div class="row"><small>'+esc(state.profile.name)+'</small><span class="avatar">'+esc(state.profile.name.slice(0,1).toUpperCase())+'</span></div></header>'+({Diario:diary,Plan:planPage,Recetas:recipePage,Progreso:progress,Ajustes:settings}[page])()+'</main><nav aria-label="Navegación principal">'+['Diario','Plan','Recetas','Progreso','Ajustes'].map((p,i)=>button('<span>'+['◉','▦','♧','↗','⚙'][i]+'</span>'+p,'page','data-page="'+p+'"',page===p?'active':'')).join('')+'</nav>'}
 function diary(){const t=totals(),g=state.profile,n=Math.abs(g.k-t.k),pct=Math.min(100,t.k/g.k*100);return heading('Tu día, en equilibrio','Cada comida cuenta. Un hábito a la vez.')+'<div class="between"><input class="dates" aria-label="Fecha" id="date" type="date" value="'+date+'">'+button('＋ Registrar','add','data-meal="0"','')+'</div><div class="card"><div class="between"><h2>Resumen diario</h2><span class="pill">'+g.k+' kcal</span></div><div class="summary"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45" fill="none" stroke="#edf2e6" stroke-width="6"/><circle cx="50" cy="50" r="45" fill="none" stroke="#93af75" stroke-width="6" stroke-linecap="round" pathLength="100" stroke-dasharray="'+pct+' 100"/></svg><div class="value"><small>'+(g.k>=t.k?'TE QUEDAN':'SOBRE EL OBJETIVO')+'</small><strong>'+round(n)+'</strong><small>kcal</small></div></div><div>'+[['p','Proteínas'],['c','Carbohidratos'],['f','Grasas']].map(([k,l])=>'<div class="macro"><div class="between"><b>'+l+'</b><span>'+round(t[k])+'/'+g[k]+' g</span></div><progress max="'+g[k]+'" value="'+t[k]+'"></progress></div>').join('')+'</div></div><small>'+round(t.k)+' kcal consumidas · Objetivos editables</small></div><div class="between section"><h2>Tus comidas</h2>'+button('Copiar ayer','copy','','text-btn')+'</div>'+meals.map((m,i)=>{const entries=day().entries.filter(e=>e.meal===i);return '<section class="card"><div class="between"><div class="row"><span>'+icons[i]+'</span><div><h3>'+m+'</h3><small>'+round(totals(entries).k)+' kcal</small></div></div>'+button('＋','add','data-meal="'+i+'" aria-label="Agregar a '+m+'"')+'</div>'+(entries.length?entries.map(e=>'<div class="entry"><span>'+esc(e.emoji)+'</span><div class="grow"><b>'+esc(e.name)+'</b><small>'+e.grams+' g · '+round(e.k*e.grams/100)+' kcal</small></div>'+button('✎','edit','data-id="'+esc(e.uid)+'" aria-label="Editar porción"')+button('×','delete','data-id="'+esc(e.uid)+'" aria-label="Eliminar alimento"')+'</div>').join(''):'<p class="empty">Registra lo que comiste. Este espacio es tuyo.</p>')+'</section>'}).join('')+'<div class="card"><div class="between"><h2>💧 Agua</h2><b>'+day().water/1000+' / '+g.water/1000+' L</b></div><progress max="'+g.water+'" value="'+day().water+'"></progress><div class="between section">'+button('− 250 ml','water','data-value="-250"')+button('＋ 250 ml','water','data-value="250"')+'</div></div>'}
@@ -36,7 +100,7 @@ function shopping(){const list={};weekDates().forEach(d=>Object.values(state.pla
 function progress(){const weights=[...state.weights].sort((a,b)=>b.date.localeCompare(a.date));return heading('Mira tu progreso','Cada registro es una parte de tu historia.')+button('＋ Registrar peso','weight','','')+'<div class="card"><small>ÚLTIMO PESO</small><h1>'+(weights[0]?.value||'—')+' kg</h1><p class="note">'+Object.values(state.days).filter(d=>d.entries.length).length+' días con comidas registradas</p></div><div class="card"><h2>Calorías · últimos 7 días</h2><div class="chart">'+Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);const t=totals(state.days[today(d)]?.entries||[]),h=Math.min(100,t.k/state.profile.k*100);return '<div class="column">'+round(t.k)+'<svg viewBox="0 0 30 110"><rect class="colbar" x="3" y="'+(110-h)+'" width="24" height="'+h+'" rx="4"/></svg>'+d.toLocaleDateString('es',{weekday:'short'})+'</div>'}).join('')+'</div></div><div class="card"><h2>Historial de peso</h2>'+(weights.map(w=>'<div class="entry"><span class="grow">'+esc(w.date)+'</span><b>'+w.value+' kg</b>'+button('×','delete-weight','data-date="'+w.date+'" aria-label="Eliminar peso"')+'</div>').join('')||'<p class="empty">Registra tu primer peso.</p>')+'</div>'}
 function settings(){return heading('Tu espacio personal','Objetivos, datos y seguridad de tu cuenta.')+'<form id="settings" class="card"><h2>Objetivos diarios</h2><div class="form-grid">'+[['name','Nombre'],['k','Calorías (kcal)'],['p','Proteínas (g)'],['c','Carbohidratos (g)'],['f','Grasas (g)'],['water','Agua (ml)']].map(([k,n])=>'<label>'+n+'<input name="'+k+'" value="'+esc(state.profile[k])+'" '+(k==='name'?'maxlength="50"':'type="number" min="1" max="'+(k==='water'?15000:k==='k'?10000:1000)+'"')+' required></label>').join('')+'</div><p class="note">Los valores iniciales son ejemplos, no recomendaciones personales.</p><button class="wide">Guardar objetivos</button></form><div class="card"><h2>Tus datos</h2><p class="note">Guardados en el servidor y separados por cuenta. Las copias descargadas contienen tus registros personales.</p>'+button('↓ Exportar copia','export')+'<label>Importar una copia JSON<input id="import" type="file" accept=".json,application/json"></label>'+button('Importar datos de la versión anterior','legacy')+'</div><div class="card"><h2>Seguridad</h2><p>'+esc(account)+'</p><p class="note">Sesión de hasta 12 horas, con cierre tras 30 minutos sin actividad. Iniciar sesión en otro dispositivo cierra la sesión anterior.</p>'+button('Cerrar sesión','logout','','danger wide')+'</div>'}
 const actions={
-close,mode:el=>{authMode=el.dataset.mode;auth()},page:el=>{page=el.dataset.page;render()},add:el=>add(Number(el.dataset.meal)),
+close,'retry-captcha':retryCaptcha,mode:el=>{if($('#auth-form')?.dataset.submitting==='true')return;authMode=el.dataset.mode;auth()},page:el=>{page=el.dataset.page;render()},add:el=>add(Number(el.dataset.meal)),
 choose:el=>{chosen=foods().find(f=>f.id===el.dataset.id);portion()},edit:el=>{chosen=day().entries.find(e=>e.uid===el.dataset.id);editing=chosen.uid;meal=chosen.meal;portion(chosen.grams)},
 delete:el=>persist(()=>{day().entries=day().entries.filter(e=>e.uid!==el.dataset.id)}),
 water:el=>persist(()=>{day().water=Math.min(20000,Math.max(0,day().water+Number(el.dataset.value)))}),
@@ -56,19 +120,34 @@ document.addEventListener('change',async e=>{const el=e.target;if(el.id==='date'
 if(el.dataset.plan){const d=el.dataset.plan,m=el.dataset.meal,v=el.value;await persist(()=>{state.plan[d]||={};if(v==='')delete state.plan[d][m];else state.plan[d][m]=Number(v)})}
 if(el.dataset.check){const id=el.dataset.check,on=el.checked;await persist(()=>{state.checks=state.checks.filter(x=>x!==id);if(on)state.checks.push(id)})}
 if(el.id==='import'){const f=el.files[0];if(!f)return;if(f.size>250000){toast('La copia supera el tamaño máximo.');return}try{const data=JSON.parse(await f.text());if(confirm('¿Reemplazar los datos actuales por esta copia?'))await persist(()=>{state=data})}catch{toast('Archivo JSON inválido.')}el.value=''}});
-document.addEventListener('submit',async e=>{e.preventDefault();const form=e.target,f=new FormData(form),submit=form.querySelector('button[type=submit],button:not([type])');if(submit)submit.disabled=true;
+document.addEventListener('submit',async e=>{e.preventDefault();const form=e.target,f=new FormData(form),submit=form.querySelector('button[type=submit],button:not([type])');
+const isAuth=form.id==='auth-form';
+if(isAuth){
+  if(!captchaToken||form.dataset.submitting==='true')return;
+  form.dataset.submitting='true';
+}
+if(submit)submit.disabled=true;
 try{
-if(form.id==='auth-form'){if(authMode==='register'&&f.get('password')!==f.get('confirm'))throw Error('Las contraseñas no coinciden.');const r=await api('auth/'+authMode,'POST',{email:f.get('email'),password:f.get('password'),...(authMode==='register'?{name:f.get('name'),invitation:f.get('invitation')}:{}),website:f.get('website'),captcha:window.turnstile?.getResponse(widget)||''});csrf=r.csrf;account=r.email;const data=await api('state');state=data.state;version=data.version;form.reset();if(widget!==null){window.turnstile.remove(widget);widget=null}render()}
+if(isAuth){if(authMode==='register'&&f.get('password')!==f.get('confirm'))throw Error('Las contraseñas no coinciden.');const r=await api('auth/'+authMode,'POST',{email:f.get('email'),password:f.get('password'),...(authMode==='register'?{name:f.get('name'),invitation:f.get('invitation')}:{}),website:f.get('website'),captcha:captchaToken});csrf=r.csrf;account=r.email;const data=await api('state');state=data.state;version=data.version;form.reset();if(widget!==null){window.turnstile.remove(widget);widget=null}render()}
 if(form.id==='portion'){const {uid,grams,meal:unused,...food}=chosen;const entry={...food,uid:editing||crypto.randomUUID(),grams:Number(f.get('grams')),meal:Number(f.get('meal'))};close();await persist(()=>{if(editing)day().entries=day().entries.map(x=>x.uid===editing?entry:x);else day().entries.push(entry)})}
 if(form.id==='custom'){chosen={id:crypto.randomUUID(),name:f.get('name').trim(),emoji:'🍽',...Object.fromEntries(['k','p','c','f'].map(k=>[k,Number(f.get(k))]))};if(await persist(()=>state.foods.push(chosen)))portion()}
 if(form.id==='barcode'){chosen=await api('food/'+f.get('code'));if(await persist(()=>{if(!state.foods.some(x=>x.id===chosen.id))state.foods.push(chosen)}))portion()}
 if(form.id==='recipe'){const entries=recipeEntries(Number(form.dataset.index),Number(f.get('meal')));close();await persist(()=>day().entries.push(...entries))}
 if(form.id==='weight'){const d=f.get('date');close();await persist(()=>{state.weights=state.weights.filter(w=>w.date!==d);state.weights.push({date:d,value:Number(f.get('weight'))})})}
 if(form.id==='settings')await persist(()=>{for(const k of Object.keys(state.profile))state.profile[k]=k==='name'?f.get(k).trim():Number(f.get(k))});
-}catch(err){if(form.id==='auth-form'){authError(err.message);if(widget!==null)window.turnstile.reset(widget)}else toast(err.message)}finally{if(submit)submit.disabled=false}});
+}catch(err){
+  if(isAuth){authError(err.message);retryCaptcha()}else toast(err.message);
+}finally{
+  if(isAuth){delete form.dataset.submitting;updateAuthSubmit()}
+  else if(submit)submit.disabled=false;
+}});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
 async function boot(){try{if('serviceWorker'in navigator){const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(r=>r.unregister()))}if('caches'in window)await Promise.all((await caches.keys()).filter(k=>k.startsWith('nutra-')).map(k=>caches.delete(k)));
 const [c,data]=await Promise.all([api('config'),fetch('/foods.json',{cache:'no-store'}).then(r=>r.json())]);config=c;base=data.base;recipes=data.recipes;
-try{const me=await api('auth/me');csrf=me.csrf;account=me.email;const d=await api('state');state=d.state;version=d.version;render()}catch(e){if(e.status!==401)throw e;auth()}
+const me=await api('auth/me');
+if(!me.csrf){await auth();return;}
+csrf=me.csrf;account=me.email;
+try{const d=await api('state');state=d.state;version=d.version;render()}
+catch(e){if(e.status!==401)throw e;csrf='';await auth()}
 }catch(e){$('#app').innerHTML='<main class="auth"><h1>No pudimos conectar</h1><p>'+esc(e.message)+'</p>'+button('Reintentar','reload','','')+'</main>'}}
 actions.reload=()=>location.reload();boot();

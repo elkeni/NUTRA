@@ -47,9 +47,10 @@ async function limit(key,max,windowMs){
 }
 function send(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(data))}
 function cookie(res,value,seconds){res.setHeader('Set-Cookie',cookieName+'='+value+'; Path=/; HttpOnly; SameSite=Strict; Max-Age='+seconds+(secure?'; Secure':''))}
-async function session(req){const cookies=(req.headers.cookie||'').split(';').map(x=>x.trim());const raw=cookies.find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1);
+async function session(req,optional=false){const cookies=(req.headers.cookie||'').split(';').map(x=>x.trim());const raw=cookies.find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1);
+if((!raw||!/^[a-f0-9]{64}$/.test(raw))&&optional)return null;
 if(!raw||!/^[a-f0-9]{64}$/.test(raw))throw fail(401,'Inicia sesión para continuar.');
-const s=await db.prepare('SELECT * FROM sessions WHERE id=? AND expires>? AND last_seen>?').get(hash(raw),Date.now(),Date.now()-1800000);if(!s)throw fail(401,'Tu sesión terminó. Vuelve a ingresar.');
+const s=await db.prepare('SELECT * FROM sessions WHERE id=? AND expires>? AND last_seen>?').get(hash(raw),Date.now(),Date.now()-1800000);if(!s&&optional)return null;if(!s)throw fail(401,'Tu sesión terminó. Vuelve a ingresar.');
 await db.prepare('UPDATE sessions SET last_seen=? WHERE id=?').run(Date.now(),s.id);return s}
 async function body(req,max=262144){if(!/^application\/json(?:;|$)/i.test(req.headers['content-type']||''))throw fail(415,'Se requiere JSON.');if(Number(req.headers['content-length'])>max)throw fail(413,'Solicitud demasiado grande.');let size=0,chunks=[];for await(const chunk of req){size+=chunk.length;if(size>max)throw fail(413,'Solicitud demasiado grande.');chunks.push(chunk)}try{return JSON.parse(Buffer.concat(chunks).toString('utf8'))}catch{throw fail(400,'JSON inválido.')}}
 async function captcha(value,action){if(typeof value!=='string'||!value||value.length>2048)throw fail(400,'Completa la verificación de seguridad.');
@@ -102,7 +103,10 @@ if(config.databaseUrl){
   db.prepare('INSERT INTO sessions VALUES(?,?,?,?,?)').run(hash(raw),user.id,csrf,now+43200000,now);
 }cookie(res,raw,43200);return send(res,200,{csrf,email:user.email});
 }
-const s=await session(req);await limit('user:'+s.user_id,180,60000);
+const checkingSession=p==='/api/auth/me'&&req.method==='GET';
+const s=await session(req,checkingSession);
+if(!s)return send(res,200,{csrf:null,email:null});
+await limit('user:'+s.user_id,180,60000);
 if(req.method!=='GET'&&!equal(req.headers['x-csrf-token'],s.csrf))throw fail(403,'Verificación de sesión inválida.');
 if(p==='/api/auth/me'&&req.method==='GET'){const u=await db.prepare('SELECT email FROM users WHERE id=?').get(s.user_id);return send(res,200,{csrf:s.csrf,email:u.email})}
 if(p==='/api/auth/logout'&&req.method==='POST'){await db.prepare('DELETE FROM sessions WHERE id=?').run(s.id);cookie(res,'',0);return send(res,200,{ok:true})}

@@ -10,7 +10,7 @@ const request=async(p,{method='GET',body,cookie,csrf,headers={}}={})=>{const r=a
 const register=async(email='a@example.com')=>{const r=await request('/api/auth/register',{method:'POST',body:{name:'Prueba',email,invitation:'test-invitation-at-least-32-characters',password:'una frase extensa para pruebas',captcha:'valid-'+counter++}});assert.equal(r.status,200,JSON.stringify(r.data));return {cookie:r.headers.get('set-cookie').split(';')[0],csrf:r.data.csrf}};
 return {request,register,dir,origin};}
 test('Validación estricta rechaza datos fuera de rango y campos arbitrarios',()=>{assert.equal(validState(fresh('Ana')),true);const s=fresh('Ana');s.profile.k=-1;assert.equal(validState(s),false);s.profile.k=2200;s.admin=true;assert.equal(validState(s),false)});
-test('Acceso anónimo, archivos privados, CSP y origen cruzado',async t=>{const {request}=await fixture(t);assert.equal((await request('/api/state')).status,401);for(const p of ['/.env','/data/nutra.sqlite','/server.cjs','/.git/config'])assert.equal((await request(p)).status,404);
+test('Acceso anónimo, archivos privados, CSP y origen cruzado',async t=>{const {request}=await fixture(t);assert.equal((await request('/api/state')).status,401);const me=await request('/api/auth/me');assert.equal(me.status,200);assert.deepEqual(me.data,{csrf:null,email:null});for(const p of ['/.env','/data/nutra.sqlite','/server.cjs','/.git/config'])assert.equal((await request(p)).status,404);
 const r=await request('/');assert.equal(r.status,200);assert.ok(!r.headers.get('content-security-policy').includes('unsafe-inline'));assert.equal(r.headers.get('x-frame-options'),'DENY');assert.equal((await request('/api/auth/login',{method:'POST',body:{},headers:{Origin:'https://evil.invalid'}})).status,403)});
 test('Registro, cookies, CSRF, aislamiento, conflictos y logout',async t=>{const {request,register}=await fixture(t);const a=await register(),b=await register('b@example.com');
 let r=await request('/api/state',{...a});assert.equal(r.status,200);const data=r.data;data.state.profile.name='Solo A';
@@ -19,6 +19,7 @@ assert.equal((await request('/api/state',{method:'PUT',...a,body:data})).status,
 assert.equal((await request('/api/state',{method:'PUT',...a,body:data})).status,409);
 assert.equal((await request('/api/state',b)).data.state.profile.name,'Prueba');
 assert.equal((await request('/api/state',a)).data.state.profile.name,'Solo A');
+assert.deepEqual((await request('/api/auth/me',a)).data,{csrf:a.csrf,email:'a@example.com'});
 assert.equal((await request('/api/auth/logout',{method:'POST',...a,body:{}})).status,200);assert.equal((await request('/api/state',a)).status,401)});
 test('CAPTCHA inválido, repetición, correo no autorizado y contraseña corta',async t=>{const {request}=await fixture(t);const body={name:'Ana',email:'a@example.com',invitation:'test-invitation-at-least-32-characters',password:'una contraseña extensa segura',captcha:'invalid'};
 assert.equal((await request('/api/auth/register',{method:'POST',body})).status,400);body.captcha='valid-replay';
