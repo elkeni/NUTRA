@@ -1,5 +1,7 @@
 'use strict';
 const {Pool} = require('pg');
+const fs = require('node:fs');
+const path = require('node:path');
 
 function connect(url) {
   const parsed = new URL(url);
@@ -12,7 +14,7 @@ function connect(url) {
   }
   return new Pool({
     connectionString: parsed.toString(),
-    ssl: {rejectUnauthorized: true},
+    ssl: {rejectUnauthorized: true, ca: fs.readFileSync(path.join(__dirname, '../certs/supabase-ca.pem'), 'utf8')},
     max: 2,
     idleTimeoutMillis: 10000,
     connectionTimeoutMillis: 5000,
