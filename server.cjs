@@ -146,4 +146,22 @@ server.listen(Number(process.env.PORT||4173),'127.0.0.1',()=>console.log('Nutra:
 function configFromEnv(env){
 return {origin:env.APP_ORIGIN||(env.VERCEL_PROJECT_PRODUCTION_URL?'https://'+env.VERCEL_PROJECT_PRODUCTION_URL:'http://127.0.0.1:4173'),databaseUrl:env.DATABASE_URL,production:env.NODE_ENV==='production',turnstileSiteKey:env.TURNSTILE_SITE_KEY,turnstileSecret:env.TURNSTILE_SECRET_KEY,registrationCode:env.REGISTRATION_CODE,allowedEmails:(env.ALLOWED_EMAILS||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean),dataDir:env.DATA_DIR};
 }
-module.exports={createApp,passwordHash,configFromEnv};
+let vercelHandler;
+
+function handleVercelRequest(req, res) {
+  if (!vercelHandler) {
+    try {
+      const config = configFromEnv(process.env);
+      if (!config.databaseUrl) throw new Error('Falta DATABASE_URL.');
+      vercelHandler = createApp({...config, production: true}).listeners('request')[0];
+    } catch (error) {
+      const message = error instanceof TypeError ? 'Revisa APP_ORIGIN y DATABASE_URL.' : error.message;
+      console.error('Error de inicio de Nutra:', message);
+      res.writeHead(503, {'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store'});
+      return res.end(JSON.stringify({error: 'Nutra aún no está configurada en el servidor.'}));
+    }
+  }
+  return vercelHandler(req, res);
+}
+
+module.exports = Object.assign(handleVercelRequest, {createApp, passwordHash, configFromEnv});

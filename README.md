@@ -47,7 +47,7 @@ El backend protege las contraseñas con scrypt, verifica Turnstile en el servido
 
 1. En Supabase, abre **Connect → Transaction pooler** y completa la contraseña en la cadena. Si tiene caracteres reservados, codifica la contraseña para la URL.
 2. Ejecuta `npm install`. Luego migra tu cuenta desde PowerShell usando el bloque siguiente. El script crea el esquema privado y evita sobrescribir cuentas existentes.
-3. En Vercel Hobby, importa el repositorio con Node.js 24. Nutra usa `server.ts` como entrada. Configura `DATABASE_URL`, `ALLOWED_EMAILS`, `REGISTRATION_CODE`, `TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY` en Production.
+3. En Vercel Hobby, importa el repositorio con Node.js 24. Nutra usa `server.cjs` como entrada. Configura `DATABASE_URL`, `ALLOWED_EMAILS`, `REGISTRATION_CODE`, `TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY` en Production.
 4. Nutra usa `VERCEL_PROJECT_PRODUCTION_URL` si `APP_ORIGIN` está vacío. Si Vercel no expone esa variable, configura `APP_ORIGIN` con la URL HTTPS exacta y vuelve a desplegar. Agrega el hostname a Turnstile y prueba iniciar sesión y guardar un alimento desde el celular.
 
 ```powershell
